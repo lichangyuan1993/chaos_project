@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ffp.infrastructure.persistence.mapper.MemberMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.ffp.infrastructure.persistence.entity.MemberEntity">
+            <id property="recId" column="REC_ID" jdbcType="VARCHAR"/>
+            <result property="memberId" column="MEMBER_ID" jdbcType="VARCHAR"/>
+            <result property="membershipNumber" column="MEMBERSHIP_NUMBER" jdbcType="VARCHAR"/>
+            <result property="gender" column="GENDER" jdbcType="CHAR"/>
+            <result property="dateOfBirth" column="DATE_OF_BIRTH" jdbcType="DATE"/>
+            <result property="familyNameCn" column="FAMILY_NAME_CN" jdbcType="VARCHAR"/>
+            <result property="givenNameCn" column="GIVEN_NAME_CN" jdbcType="VARCHAR"/>
+            <result property="familyNameEn" column="FAMILY_NAME_EN" jdbcType="VARCHAR"/>
+            <result property="givenNameEn" column="GIVEN_NAME_EN" jdbcType="VARCHAR"/>
+            <result property="nationality" column="NATIONALITY" jdbcType="VARCHAR"/>
+            <result property="enrollmentDate" column="ENROLLMENT_DATE" jdbcType="TIMESTAMP"/>
+            <result property="sourceChannel" column="SOURCE_CHANNEL" jdbcType="VARCHAR"/>
+            <result property="membershipTier" column="MEMBERSHIP_TIER" jdbcType="VARCHAR"/>
+            <result property="membershipStatus" column="MEMBERSHIP_STATUS" jdbcType="VARCHAR"/>
+            <result property="tierEffectiveDate" column="TIER_EFFECTIVE_DATE" jdbcType="DATE"/>
+            <result property="tierExpiryDate" column="TIER_EXPIRY_DATE" jdbcType="DATE"/>
+            <result property="lifetimeEliteInd" column="LIFETIME_ELITE_IND" jdbcType="CHAR"/>
+            <result property="currentNauticalMile" column="CURRENT_NAUTICAL_MILE" jdbcType="DECIMAL"/>
+            <result property="eligibleNauticalMile" column="ELIGIBLE_NAUTICAL_MILE" jdbcType="DECIMAL"/>
+            <result property="lifetimeNauticalMile" column="LIFETIME_NAUTICAL_MILE" jdbcType="DECIMAL"/>
+            <result property="nextNauticalMileExpiry" column="NEXT_NAUTICAL_MILE_EXPIRY" jdbcType="DATE"/>
+            <result property="currentTierQualMile" column="CURRENT_TIER_QUAL_MILE" jdbcType="DECIMAL"/>
+            <result property="currentTierQualSegment" column="CURRENT_TIER_QUAL_SEGMENT" jdbcType="INTEGER"/>
+            <result property="tierQualStartDate" column="TIER_QUAL_START_DATE" jdbcType="DATE"/>
+            <result property="tierQualEndDate" column="TIER_QUAL_END_DATE" jdbcType="DATE"/>
+            <result property="pinCode" column="PIN_CODE" jdbcType="VARCHAR"/>
+            <result property="lastActivityDate" column="LAST_ACTIVITY_DATE" jdbcType="TIMESTAMP"/>
+            <result property="createTimestamp" column="CREATE_TIMESTAMP" jdbcType="TIMESTAMP"/>
+            <result property="updateTimestamp" column="UPDATE_TIMESTAMP" jdbcType="TIMESTAMP"/>
+            <result property="createUser" column="CREATE_USER" jdbcType="VARCHAR"/>
+            <result property="updateUser" column="UPDATE_USER" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        REC_ID,MEMBER_ID,MEMBERSHIP_NUMBER,
+        GENDER,DATE_OF_BIRTH,FAMILY_NAME_CN,
+        GIVEN_NAME_CN,FAMILY_NAME_EN,GIVEN_NAME_EN,
+        NATIONALITY,ENROLLMENT_DATE,SOURCE_CHANNEL,
+        MEMBERSHIP_TIER,MEMBERSHIP_STATUS,TIER_EFFECTIVE_DATE,
+        TIER_EXPIRY_DATE,LIFETIME_ELITE_IND,CURRENT_NAUTICAL_MILE,
+        ELIGIBLE_NAUTICAL_MILE,LIFETIME_NAUTICAL_MILE,NEXT_NAUTICAL_MILE_EXPIRY,
+        CURRENT_TIER_QUAL_MILE,CURRENT_TIER_QUAL_SEGMENT,TIER_QUAL_START_DATE,
+        TIER_QUAL_END_DATE,PIN_CODE,LAST_ACTIVITY_DATE,
+        CREATE_TIMESTAMP,UPDATE_TIMESTAMP,CREATE_USER,
+        UPDATE_USER
+    </sql>
+
+    <insert id="create">
+        INSERT INTO FFP.MEMBER(
+        <trim suffixOverrides=",">
+            <if test="recId != null">
+                REC_ID,
+            </if>
+            <if test="memberId != null">
+                MEMBER_ID,
+            </if>
+            <if test="membershipNumber != null">
+                MEMBERSHIP_NUMBER,
+            </if>
+            <if test="gender != null">
+                GENDER,
+            </if>
+            <if test="dateOfBirth != null">
+                DATE_OF_BIRTH,
+            </if>
+            <if test="familyNameCn != null">
+                FAMILY_NAME_CN,
+            </if>
+            <if test="givenNameCn != null">
+                GIVEN_NAME_CN,
+            </if>
+            <if test="familyNameEn != null">
+                FAMILY_NAME_EN,
+            </if>
+            <if test="givenNameEn != null">
+                GIVEN_NAME_EN,
+            </if>
+            <if test="nationality != null">
+                NATIONALITY,
+            </if>
+            <if test="enrollmentDate != null">
+                ENROLLMENT_DATE,
+            </if>
+            <if test="sourceChannel != null">
+                SOURCE_CHANNEL,
+            </if>
+            <if test="membershipTier != null">
+                MEMBERSHIP_TIER,
+            </if>
+            <if test="membershipStatus != null">
+                MEMBERSHIP_STATUS,
+            </if>
+            <if test="tierEffectiveDate != null">
+                TIER_EFFECTIVE_DATE,
+            </if>
+            <if test="tierExpiryDate != null">
+                TIER_EXPIRY_DATE,
+            </if>
+            <if test="lifetimeEliteInd != null">
+                LIFETIME_ELITE_IND,
+            </if>
+            <if test="currentNauticalMile != null">
+                CURRENT_NAUTICAL_MILE,
+            </if>
+            <if test="eligibleNauticalMile != null">
+                ELIGIBLE_NAUTICAL_MILE,
+            </if>
+            <if test="lifetimeNauticalMile != null">
+                LIFETIME_NAUTICAL_MILE,
+            </if>
+            <if test="nextNauticalMileExpiry != null">
+                NEXT_NAUTICAL_MILE_EXPIRY,
+            </if>
+            <if test="currentTierQualMile != null">
+                CURRENT_TIER_QUAL_MILE,
+            </if>
+            <if test="currentTierQualSegment != null">
+                CURRENT_TIER_QUAL_SEGMENT,
+            </if>
+            <if test="tierQualStartDate != null">
+                TIER_QUAL_START_DATE,
+            </if>
+            <if test="tierQualEndDate != null">
+                TIER_QUAL_END_DATE,
+            </if>
+            <if test="pinCode != null">
+                PIN_CODE,
+            </if>
+            <if test="lastActivityDate != null">
+                LAST_ACTIVITY_DATE,
+            </if>
+            <if test="createTimestamp != null">
+                CREATE_TIMESTAMP,
+            </if>
+            <if test="updateTimestamp != null">
+                UPDATE_TIMESTAMP,
+            </if>
+            <if test="createUser != null">
+                CREATE_USER,
+            </if>
+            <if test="updateUser != null">
+                UPDATE_USER
+            </if>
+        </trim>
+        )VALUES(
+        <trim suffixOverrides=",">
+            <if test="recId != null">
+                #{recId},
+            </if>
+            <if test="memberId != null">
+                #{memberId},
+            </if>
+            <if test="membershipNumber != null">
+                #{membershipNumber},
+            </if>
+            <if test="gender != null">
+                #{gender},
+            </if>
+            <if test="dateOfBirth != null">
+                #{dateOfBirth},
+            </if>
+            <if test="familyNameCn != null">
+                #{familyNameCn},
+            </if>
+            <if test="givenNameCn != null">
+                #{givenNameCn},
+            </if>
+            <if test="familyNameEn != null">
+                #{familyNameEn},
+            </if>
+            <if test="givenNameEn != null">
+                #{givenNameEn},
+            </if>
+            <if test="nationality != null">
+                #{nationality},
+            </if>
+            <if test="enrollmentDate != null">
+                #{enrollmentDate},
+            </if>
+            <if test="sourceChannel != null">
+                #{sourceChannel},
+            </if>
+            <if test="membershipTier != null">
+                #{membershipTier},
+            </if>
+            <if test="membershipStatus != null">
+                #{membershipStatus},
+            </if>
+            <if test="tierEffectiveDate != null">
+                #{tierEffectiveDate},
+            </if>
+            <if test="tierExpiryDate != null">
+                #{tierExpiryDate},
+            </if>
+            <if test="lifetimeEliteInd != null">
+                #{lifetimeEliteInd},
+            </if>
+            <if test="currentNauticalMile != null">
+                #{currentNauticalMile},
+            </if>
+            <if test="eligibleNauticalMile != null">
+                #{eligibleNauticalMile},
+            </if>
+            <if test="lifetimeNauticalMile != null">
+                #{lifetimeNauticalMile},
+            </if>
+            <if test="nextNauticalMileExpiry != null">
+                #{nextNauticalMileExpiry},
+            </if>
+            <if test="currentTierQualMile != null">
+                #{currentTierQualMile},
+            </if>
+            <if test="currentTierQualSegment != null">
+                #{currentTierQualSegment},
+            </if>
+            <if test="tierQualStartDate != null">
+                #{tierQualStartDate},
+            </if>
+            <if test="tierQualEndDate != null">
+                #{tierQualEndDate},
+            </if>
+            <if test="pinCode != null and pinCode != ''">
+                #{pinCode},
+            </if>
+            <if test="lastActivityDate != null">
+                #{lastActivityDate},
+            </if>
+            <if test="createTimestamp != null">
+                #{createTimestamp},
+            </if>
+            <if test="updateTimestamp != null">
+                #{updateTimestamp},
+            </if>
+            <if test="createUser != null">
+                #{createUser},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser}
+            </if>
+        </trim>
+        )
+
+    </insert>
+
+
+    <update id="update">
+        UPDATE FFP.MEMBER
+        <set>
+            <if test="memberId != null and memberId != ''">
+                MEMBER_ID = #{memberId},
+            </if>
+            <if test="membershipNumber != null and membershipNumber != ''">
+                MEMBERSHIP_NUMBER = #{membershipNumber},
+            </if>
+            <if test="gender != null and gender != ''">
+                GENDER = #{gender},
+            </if>
+            <if test="dateOfBirth != null">
+                DATE_OF_BIRTH = #{dateOfBirth},
+            </if>
+            <if test="familyNameCn != null">
+                FAMILY_NAME_CN = #{familyNameCn},
+            </if>
+            <if test="givenNameCn != null">
+                GIVEN_NAME_CN = #{givenNameCn},
+            </if>
+            <if test="familyNameEn != null and familyNameEn != ''">
+                FAMILY_NAME_EN = #{familyNameEn},
+            </if>
+            <if test="givenNameEn != null and givenNameEn != ''">
+                GIVEN_NAME_EN = #{givenNameEn},
+            </if>
+            <if test="nationality != null and nationality != ''">
+                NATIONALITY = #{nationality},
+            </if>
+            <if test="enrollmentDate != null">
+                ENROLLMENT_DATE = #{enrollmentDate},
+            </if>
+            <if test="sourceChannel != null and sourceChannel != ''">
+                SOURCE_CHANNEL = #{sourceChannel},
+            </if>
+            <if test="membershipTier != null and membershipTier != ''">
+                MEMBERSHIP_TIER = #{membershipTier},
+            </if>
+            <if test="membershipStatus != null and membershipStatus != ''">
+                MEMBERSHIP_STATUS = #{membershipStatus},
+            </if>
+            <if test="tierEffectiveDate != null">
+                TIER_EFFECTIVE_DATE = #{tierEffectiveDate},
+            </if>
+            <if test="tierExpiryDate != null">
+                TIER_EXPIRY_DATE = #{tierExpiryDate},
+            </if>
+            <if test="lifetimeEliteInd != null and lifetimeEliteInd != ''">
+                LIFETIME_ELITE_IND = #{lifetimeEliteInd},
+            </if>
+            <if test="currentNauticalMile != null">
+                CURRENT_NAUTICAL_MILE = #{currentNauticalMile},
+            </if>
+            <if test="eligibleNauticalMile != null">
+                ELIGIBLE_NAUTICAL_MILE = #{eligibleNauticalMile},
+            </if>
+            <if test="lifetimeNauticalMile != null">
+                LIFETIME_NAUTICAL_MILE = #{lifetimeNauticalMile},
+            </if>
+            <if test="nextNauticalMileExpiry != null">
+                NEXT_NAUTICAL_MILE_EXPIRY = #{nextNauticalMileExpiry},
+            </if>
+            <if test="currentTierQualMile != null">
+                CURRENT_TIER_QUAL_MILE = #{currentTierQualMile},
+            </if>
+            <if test="currentTierQualSegment != null">
+                CURRENT_TIER_QUAL_SEGMENT = #{currentTierQualSegment},
+            </if>
+            <if test="tierQualStartDate != null">
+                TIER_QUAL_START_DATE = #{tierQualStartDate},
+            </if>
+            <if test="tierQualEndDate != null">
+                TIER_QUAL_END_DATE = #{tierQualEndDate},
+            </if>
+            <if test="pinCode != null and pinCode != ''">
+                PIN_CODE = #{pinCode},
+            </if>
+            <if test="lastActivityDate != null">
+                LAST_ACTIVITY_DATE = #{lastActivityDate},
+            </if>
+            <if test="createTimestamp != null">
+                CREATE_TIMESTAMP = #{createTimestamp},
+            </if>
+            <if test="updateTimestamp != null">
+                UPDATE_TIMESTAMP = #{updateTimestamp},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                CREATE_USER = #{createUser},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                UPDATE_USER = #{updateUser}
+            </if>
+        </set>
+        <where>
+            <if test="membershipNumber != null and membershipNumber != ''">
+                AND MEMBERSHIP_NUMBER = #{membershipNumber}
+            </if>
+            <if test="memberId != null and memberId != ''">
+                AND MEMBER_ID = #{memberId}
+            </if>
+            <if test="recId != null and recId != ''">
+                AND REC_ID = #{recId}
+            </if>
+        </where>
+    </update>
+    <select id="getOne" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM FFP.MEMBER
+        <where>
+            <if test="recId != null and recId != ''">
+                AND REC_ID = #{recId}
+            </if>
+            <if test="memberId != null and memberId != ''">
+                AND MEMBER_ID = #{memberId}
+            </if>
+            <if test="membershipNumber != null and membershipNumber != ''">
+                AND MEMBERSHIP_NUMBER = #{membershipNumber}
+            </if>
+        </where>
+    </select>
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM FFP.MEMBER
+        <where>
+            <if test="membershipNumber != null and membershipNumber != ''">
+                AND MEMBERSHIP_NUMBER = #{membershipNumber}
+            </if>
+            <if test="gender != null and gender != ''">
+                AND GENDER = #{gender}
+            </if>
+            <if test="dateOfBirth != null">
+               AND DATE_OF_BIRTH = #{dateOfBirth}
+            </if>
+        </where>
+    </select>
+</mapper>
