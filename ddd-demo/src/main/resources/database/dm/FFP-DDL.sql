@@ -9,6 +9,13 @@
   * VARCHAR 和 VARCHAR2的区别，目前只有oracle数据库才有此差异
  */
 
+/**
+  * 表字段设计规则:
+  * DELETED 字段必须出现在允许删除数据的表中，逻辑删除字段，默认为N，N为正常数据，Y为逻辑删除数据
+  * VERSION_NUMBER 必须出现在允许编辑数据的表中，版本号默认为0
+  *
+ */
+
 
 DROP TABLE IF EXISTS FFP.MEMBER;
 
@@ -53,7 +60,8 @@ CREATE TABLE FFP.MEMBER
     CREATE_TIMESTAMP          TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UPDATE_TIMESTAMP          TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CREATE_USER               VARCHAR(24)                                      NOT NULL,
-    UPDATE_USER               VARCHAR(24)                                      NOT NULL
+    UPDATE_USER               VARCHAR(24)                                      NOT NULL,
+    VERSION_NUMBER            INTEGER                     DEFAULT 0            NOT NULL
 );
 
 INSERT INTO FFP.MEMBER (REC_ID, MEMBER_ID, MEMBERSHIP_NUMBER, DATE_OF_BIRTH, FAMILY_NAME_EN, GIVEN_NAME_EN,
@@ -150,14 +158,17 @@ CREATE TABLE FFP.MEMBER_FILE
     UPDATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CREATE_USER     VARCHAR(24)                             NOT NULL,
     UPDATE_USER     VARCHAR(24)                             NOT NULL,
+    VERSION_NUMBER  INTEGER                     DEFAULT 0,
     DELETED         CHAR(1)                     DEFAULT 'N' NOT NULL
 );
 
 
-INSERT INTO FFP.MEMBER_FILE(REC_ID, MEMBER_REC_ID, RELATION_TABLE, FILE_NAME, FILE_TYPE, FILE_SIZE, FILE_CONTENT, CREATE_USER, UPDATE_USER)
+INSERT INTO FFP.MEMBER_FILE(REC_ID, MEMBER_REC_ID, RELATION_TABLE, FILE_NAME, FILE_TYPE, FILE_SIZE, FILE_CONTENT,
+                            CREATE_USER, UPDATE_USER)
 VALUES ('3001', '1A1234GAS126', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加抗日战争', 'pdf', 10, 0x0000, 'ADMIN', 'ADMIN'),
-       ('3002', '1A1234GAS126', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加抗美援朝', 'pdf', 10, 0x0000,'ADMIN', 'ADMIN'),
-       ('3003', '1A1234GAS127', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加对越反击自卫战', 'pdf', 10, 0x0000,'ADMIN', 'ADMIN');
+       ('3002', '1A1234GAS126', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加抗美援朝', 'pdf', 10, 0x0000, 'ADMIN', 'ADMIN'),
+       ('3003', '1A1234GAS127', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加对越反击自卫战', 'pdf', 10, 0x0000, 'ADMIN',
+        'ADMIN');
 
 
 -- 创建状态字典表
