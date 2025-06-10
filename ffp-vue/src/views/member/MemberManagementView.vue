@@ -1,9 +1,13 @@
 <script setup lang="ts" xmlns="http://www.w3.org/1999/html">
-import { reactive } from "vue";
-import type { Member, MemberPage } from "@/views/member/types/MemberInterface.d.ts";
-import { request } from "@/utils/request";
-import { fetchData } from "@/utils/fetch";
-import { memberDict, memberTableHeaderKeys } from "@/views/member/dictionary/MemberDictionary.ts";
+import { onMounted, reactive } from 'vue'
+import type { Member, MemberPage } from '@/views/member/types/MemberInterface.d.ts'
+import { request } from '@/utils/request'
+import { fetchData } from '@/utils/fetch'
+import { MEMBER_DICTIONARY, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary.ts'
+import MemberMainForm from '@/views/member/component/MemberMainForm.vue'
+// 引入本地数据集
+import MemberDateSet from '@/views/member/datum/member-list.json'
+
 // 定义一个请求后端的接口
 
 //
@@ -18,21 +22,25 @@ import { memberDict, memberTableHeaderKeys } from "@/views/member/dictionary/Mem
 // });
 
 // action case: 获取会员列表
-const fetchMemberList = reactive({
+const memberTableState = reactive({
   request: {
-    url: "http://localhost:8080/member/list",
+    url: 'http://localhost:8080/member/list',
     param: reactive(<MemberPage>{
       pageNum: 1,
-      pageSize: 2
-    })
+      pageSize: 2,
+    }),
   },
   response: reactive(<MemberPage>{
     list: [],
     pageNum: 0,
     pageSize: 0,
     total: 0,
-    pages: 0
+    pages: 0,
   }),
+  onClickRefreshMemberList() {
+    console.log('onClickRefresh', this)
+    memberTableState.onClickGetMemberList()
+  },
   onClickGetMemberList() {
     fetchData(this.request.url, this.request.param).then((data) => {
       // 一、响应式失效：reactive 不追踪对象整体替换
@@ -52,126 +60,98 @@ const fetchMemberList = reactive({
 
       // 三、使用ref报错this.data, 然后展开this.data赋值
       // this.data.value = {...this.data.value, ...data}
-      this.response = { ...this.response, ...data };
-      console.log("clickGetMemberList", this);
-    });
-  }
-});
+      this.response = { ...this.response, ...data }
+      console.log('clickGetMemberList', this)
+    })
+  },
+})
 
-const fetchMemberDetail = reactive({
+const memberDetailState = reactive({
   request: reactive({
-    url: "http://localhost:8080/member/get",
-    param: reactive(<Member>{})
+    url: 'http://localhost:8080/member/get',
+    param: reactive(<Member>{}),
   }),
   response: reactive(<Member>{}),
   onClickGetMemberDetail(param: Member) {
-    const requestParam = { recId: param.recId};
-    request<Member>("http://localhost:8080/member/get",requestParam).then((data) => {
-      this.response = { ...this.response, ...data };
-    });
-  }
-});
+    const requestParam = { recId: param.recId }
+    request<Member>('http://localhost:8080/member/get', requestParam).then((data) => {
+      this.response = { ...this.response, ...data }
+    })
+  },
+})
 
-import { computed, ref } from 'vue'
+const memberEditorState = reactive({
+  data: reactive(<Member>{}),
+  show: false,
+  onClickOpenEditor(index: number, row: Member) {
+    memberEditorState.data = { ...this.data, ...row }
+    memberEditorState.show = true
+    console.log('onClickOpenEditor', index, this)
+  },
+  onClickCloseEditor() {
+    memberEditorState.show = false
+  },
+})
 
-interface User {
-  date: string
-  name: string
-  address: string
+const onClickOpenEditor = (index: number, row: Member) => {
+  console.log(index, row)
+  // 传递数据给MemberMainForm组件
 }
-
-const search = ref('')
-const filterTableData = computed(() =>
-  tableData.filter(
-    (data) =>
-      !search.value ||
-      data.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
-const handleEdit = (index: number, row: User) => {
+const onClickOpenDeletor = (index: number, row: Member) => {
   console.log(index, row)
 }
-const handleDelete = (index: number, row: User) => {
-  console.log(index, row)
-}
 
-const tableData: User[] = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'John',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Morgan',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Jessy',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
+onMounted(() => {
+  console.log('memberEditorState', memberEditorState)
+})
 </script>
 
 <template>
   <div class="member-view">
     <div class="member-view__header">
       <h1>Member Management View</h1>
-      <button @click="fetchMemberList.onClickGetMemberList">Get Member List</button>
+      <button @click="memberTableState.onClickGetMemberList">Get Member List</button>
+      <button @click="memberTableState.onClickRefreshMemberList">Refresh Member List</button>
     </div>
-
     <div class="member-view__body">
-      <table class="member-view__table">
-        <!-- 表头 -->
-        <thead>
-          <tr>
-            <th v-for="(key, index) in memberTableHeaderKeys" :key="index">
-              {{ memberDict[key] }}
-            </th>
-          </tr>
-        </thead>
+      <!-- 会员列表表格数据 -->
+      <div class="member-table">
+        <!-- 会员列表 -->
+        <el-table :data="memberTableState?.response?.list" style="width: 100%">
+          <!--数据行-->
+          <el-table-column
+            v-for="(key, index) in MEMBER_TABLE_KEYS"
+            :key="index"
+            :label="MEMBER_DICTIONARY[key]"
+            :prop="key"
+          />
 
-        <!-- 表体 -->
-        <tbody>
-          <tr v-for="(member, index) in fetchMemberList.response.list" :key="index">
-            <td
-              v-for="(key, idx) in memberTableHeaderKeys"
-              :key="idx"
-              @click="fetchMemberDetail.onClickGetMemberDetail(member)"
-            >
-              {{ member[key] }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <br/>
-      <el-table :data="filterTableData" style="width: 100%">
-        <el-table-column label="Date" prop="date" />
-        <el-table-column label="Name" prop="name" />
-        <el-table-column align="right">
-          <template #header>
-            <el-input v-model="search" size="small" placeholder="Type to search" />
-          </template>
-          <template #default="scope">
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-              Edit
-            </el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-            >
-              Delete
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column align="right">
+            <template #default="scope">
+              <el-button
+                size="small"
+                @click="memberEditorState.onClickOpenEditor(scope.$index, scope.row)"
+              >
+                Edit
+              </el-button>
+              <el-button
+                size="small"
+                type="danger"
+                @click="onClickOpenDeletor(scope.$index, scope.row)"
+              >
+                Delete
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <!-- 会员主数据表格 -->
+      <div class="member-form" v-if="memberEditorState.show">
+        <MemberMainForm :member="memberEditorState.data"
+                        @close="memberEditorState.onClickCloseEditor"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -191,33 +171,11 @@ const tableData: User[] = [
     color: greenyellow;
   }
 
-  &__body {
+  &__member-table {
     overflow-x: auto;
     width: 100%;
     background-color: #1e5489;
     color: yellow;
   }
-}
-
-/*.member-view__body {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  min-width: 800px;
-}*/
-
-.member-view__body th,
-.member-view__body td {
-  padding: 12px;
-  border: 1px solid #eaeaea;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.member-view__body th {
-  /* background-color: #f9f9f9;*/
-  font-weight: bold;
 }
 </style>

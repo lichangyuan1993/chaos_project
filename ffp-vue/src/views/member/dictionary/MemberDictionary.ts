@@ -1,4 +1,4 @@
-export const memberDict: Record<string, string> = {
+export const MEMBER_DICTIONARY = {
   recId: '数据主键',
   memberId: '会员编号',
   membershipNumber: '会员卡号',
@@ -33,9 +33,22 @@ export const memberDict: Record<string, string> = {
 }
 
 
-export const memberEntries = Object.entries(memberDict)
+export const MEMBER_ENTRIES = Object.entries(MEMBER_DICTIONARY)
 
-export const memberKeys = Object.keys(memberDict)
+export const MEMBER_KEYS = Object.keys(MEMBER_DICTIONARY)
 
-export const memberTableHeaderKeys = Object.keys(memberDict).filter((key, index) => 0 < index && index < 15  )
+export const MEMBER_TABLE_KEYS = [
+  'memberId',
+  'membershipNumber',
+  'gender',
+  'familyNameCn',
+  'givenNameCn',
+  'familyNameEn',
+  'givenNameEn',
+  'nationality',
+  'enrollmentDate',
+  'membershipTier',
+  'membershipStatus',
+];
+
 
