@@ -8,19 +8,6 @@ import MemberMainForm from '@/views/member/component/MemberMainForm.vue'
 // 引入本地数据集
 import MemberDateSet from '@/views/member/datum/member-list.json'
 
-// 定义一个请求后端的接口
-
-//
-// const members = reactive({
-//   webRequest: {
-//     listMember: memberList(),
-//     // memberDetail: getMember(),
-//     // updateMember: updateMember(),
-//     // deleteMember: deleteMember(),
-//     // createMember: createMember(),
-//   }
-// });
-
 // action case: 获取会员列表
 const memberTableState = reactive({
   request: {
