@@ -146,7 +146,6 @@ onMounted(() => {
 .member-view {
   width: 100%;
   background-color: #282828;
-  color: #ffffff;
 
   &__header {
     display: flex;

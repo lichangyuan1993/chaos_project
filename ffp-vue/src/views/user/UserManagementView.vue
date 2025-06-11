@@ -5,7 +5,7 @@ import {defineComponent} from 'vue'
 
 <template>
   <div>
-    <h1>Department Management View</h1>
+    <h1>User Management View</h1>
   </div>
 
 </template>

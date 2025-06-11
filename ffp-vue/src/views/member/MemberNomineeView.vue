@@ -94,51 +94,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="member-view">
-    <div class="member-view__header">
-      <button @click="memberTableState.onClickGetMemberList">Get Member List</button>
-      <button @click="memberTableState.onClickRefreshMemberList">Refresh Member List</button>
-    </div>
-    <div class="member-view__body">
-      <!-- 会员列表表格数据 -->
-      <div class="member-table">
-        <!-- 会员列表 -->
-        <el-table :data="memberTableState?.response?.list" style="width: 100%">
-          <!--数据行-->
-          <el-table-column
-            v-for="(key, index) in MEMBER_TABLE_KEYS"
-            :key="index"
-            :label="MEMBER_DICTIONARY[key]"
-            :prop="key"
-          />
-
-          <el-table-column align="right">
-            <template #default="scope">
-              <el-button
-                size="small"
-                @click="memberEditorState.onClickOpenEditor(scope.$index, scope.row)"
-              >
-                Edit
-              </el-button>
-              <el-button
-                size="small"
-                type="danger"
-                @click="onClickOpenDeletor(scope.$index, scope.row)"
-              >
-                Delete
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-
-      <!-- 会员主数据表格 -->
-      <div class="member-form" v-if="memberEditorState.show">
-        <MemberMainForm :member="memberEditorState.data"
-                        @close="memberEditorState.onClickCloseEditor"
-        />
-      </div>
-    </div>
+  <div class="nominee-view">
+    Member Nominee View
   </div>
 </template>
 
@@ -146,14 +103,14 @@ onMounted(() => {
 .member-view {
   width: 100%;
   background-color: #282828;
-  color: #ffffff;
+  color: #1a1a1a;
 
   &__header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding: 16px;
-    background-color: #2c3e50;
+    background-color: #f8f8f8;
     color: greenyellow;
   }
 
