@@ -69,9 +69,6 @@ const onClickOpenDeletor = (index: number, row: Member) => {
   console.log(index, row)
 }
 
-onMounted(() => {
-  console.log('memberEditorState', memberEditorState)
-})
 </script>
 
 <template>
