@@ -5,8 +5,6 @@ import { request } from '@/utils/request'
 import { fetchData } from '@/utils/fetch'
 import { MEMBER_DICTIONARY, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary'
 import MemberMainForm from '@/views/member/component/MemberMainForm.vue'
-// 引入本地数据集
-import MemberDateSet from '@/views/member/datum/member-list.json'
 
 // action case: 获取会员列表
 const memberTableState = reactive({
@@ -30,23 +28,6 @@ const memberTableState = reactive({
   },
   onClickGetMemberList() {
     fetchData(this.request.url, this.request.param).then((data) => {
-      // 一、响应式失效：reactive 不追踪对象整体替换
-      /*
-       * 这是在替换整个 data 对象的引用，而 Vue 的响应式系统无法检测到这种嵌套属性的整体替换，导致：
-       * 1. 响应性丢失：视图不会更新。
-       * 2. data 变成普通对象：不再是响应式的。
-       * */
-      // this.data = data;
-
-      // 二、手动赋值，响应式有效
-      // this.data.list = data.list;
-      // this.data.pageNum = data.pageNum;
-      // this.data.pageSize = data.pageSize;
-      // this.data.total = data.total;
-      // this.data.pages = data.pages;
-
-      // 三、使用ref报错this.data, 然后展开this.data赋值
-      // this.data.value = {...this.data.value, ...data}
       this.response = { ...this.response, ...data }
       console.log('clickGetMemberList', this)
     })
@@ -94,12 +75,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="member-view">
-    <div class="member-view__header">
+  <div class="ui-member">
+    <div class="ui-member__header">
       <button @click="memberTableState.onClickGetMemberList">Get Member List</button>
       <button @click="memberTableState.onClickRefreshMemberList">Refresh Member List</button>
     </div>
-    <div class="member-view__body">
+    <div class="ui-member__body">
       <!-- 会员列表表格数据 -->
       <div class="member-table">
         <!-- 会员列表 -->
@@ -143,7 +124,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.member-view {
+.ui-member {
   width: 100%;
   background-color: #282828;
 
@@ -152,7 +133,7 @@ onMounted(() => {
     justify-content: flex-end;
     align-items: center;
     padding: 16px;
-    background-color: #2c3e50;
+    /*background-color: #2c3e50;*/
     color: greenyellow;
   }
 

@@ -1,11 +1,4 @@
 <template>
-<!--
-  <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-    <el-radio-button :value="false">expand</el-radio-button>
-    <el-radio-button :value="true">collapse</el-radio-button>
-  </el-radio-group>
--->
-
   <el-menu
     default-active="2"
     class="el-menu-vertical-demo"
@@ -18,15 +11,19 @@
         <span>会员管理</span>
       </template>
         <el-menu-item index="1-1" @click="updateMenuTitle('会员入会')">
+<!--        <el-menu-item index="1-1" >-->
           <RouterLink to="/member-enrollment">会员入会</RouterLink>
         </el-menu-item>
         <el-menu-item index="1-2" @click="updateMenuTitle('会员查询')">
+<!--        <el-menu-item index="1-2">-->
           <RouterLink to="/member-search">会员查询</RouterLink>
         </el-menu-item>
         <el-menu-item index="1-3" @click="updateMenuTitle('信息变更')">
+<!--        <el-menu-item index="1-3" >-->
           <RouterLink to="/member-profile">信息变更</RouterLink>
           </el-menu-item>
         <el-menu-item index="1-4" @click="updateMenuTitle('受益人管理')">
+<!--        <el-menu-item index="1-4" >-->
           <RouterLink to="/member-nominee">受益人管理</RouterLink>
         </el-menu-item>
     </el-sub-menu>
@@ -65,8 +62,11 @@ const {menuTitle,updateMenuTitle } = inject('menuTitle');
 </script>
 
 <style>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
+.el-menu-vertical-demo {
   width: 100%;
   min-height: 100%;
+  border-radius: inherit;
+  border: 0;
 }
+
 </style>

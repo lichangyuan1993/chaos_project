@@ -94,12 +94,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="member-view">
-    <div class="member-view__header">
+  <div class="ui-member">
+    <div class="ui-member__header">
       <button @click="memberTableState.onClickGetMemberList">Get Member List</button>
       <button @click="memberTableState.onClickRefreshMemberList">Refresh Member List</button>
     </div>
-    <div class="member-view__body">
+    <div class="ui-member__body">
       <!-- 会员列表表格数据 -->
       <div class="member-table">
         <!-- 会员列表 -->
@@ -143,7 +143,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.member-view {
+.ui-member {
   width: 100%;
   background-color: #282828;
   color: #ffffff;

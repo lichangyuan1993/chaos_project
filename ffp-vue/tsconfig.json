@@ -13,10 +13,5 @@
     "src/**/*.d.ts",
     "src/**/*.vue"
   ],
-//  "compilerOptions": {
-//    "baseUrl": ".",
-//    "paths": {
-//      "@/*": ["src/*"]
-//    }
-//  }
+
 }

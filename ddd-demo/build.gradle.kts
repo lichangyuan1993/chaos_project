@@ -44,15 +44,12 @@ dependencies {
 //    developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     // mapstruct
-    implementation ("org.mapstruct:mapstruct:1.6.3")
-    annotationProcessor ("org.mapstruct:mapstruct-processor:1.6.3")
-    testAnnotationProcessor ("org.mapstruct:mapstruct-processor:1.6.3")
+    implementation("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+    testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
 //    compileOnly("com.github.pagehelper:pagehelper:6.1.0")
     compileOnly("com.github.pagehelper:pagehelper-spring-boot-starter:2.0.0")
-
-
-
 
 
     // junit
@@ -61,6 +58,12 @@ dependencies {
     // dameng
     // https://mvnrepository.com/artifact/com.dameng/DmJdbcDriver18
     implementation("com.dameng:DmJdbcDriver18:8.1.3.140")
+    // ULID
+    implementation("com.github.f4b6a3:ulid-creator:5.2.3")
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation("org.apache.commons:commons-lang3:3.17.0")
+
 }
 
 tasks.withType<Test> {

@@ -9,12 +9,15 @@
   font-weight: normal;
 }
 
+
 body {
-  min-height: 100vh;
+  margin: 0;
+  display: block;
+  min-width: 800px;
+  min-height: 600px;
   transition:
     color 0.5s,
     background-color 0.5s;
-  line-height: 1.6;
   font-family:
     Inter,
     -apple-system,
@@ -33,3 +36,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+a,.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+

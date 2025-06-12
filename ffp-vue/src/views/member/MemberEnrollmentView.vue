@@ -22,20 +22,12 @@ const memberFormState = reactive({
   data: reactive({ ...props?.member }),
 } as Member)
 
-onMounted(() => {
-  console.log(props)
 
-})
-
-//  定义事件
-const emit = defineEmits(['close']);
 
 const onSubmit = () => {
   console.log('submit!')
   request("http://localhost:8080/member/create",  memberFormState.data, 'POST').then(res => {
     console.log(res)
-    // 卸载当前组件
-    emit('close');
   })
 }
 </script>
@@ -139,7 +131,7 @@ const onSubmit = () => {
           <el-col :span="24">
             <el-form-item>
               <el-button type="primary" @click="onSubmit">保存</el-button>
-              <el-button type="primary" @click="onClose">关闭</el-button>
+              <el-button type="primary" >清除</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -156,9 +148,15 @@ const onSubmit = () => {
 }
 
 .demo-form-inline {
-  --el-input-width: 220px;
-  --el-select-width: 220px;
-  --el-date-picker-width: 220px;
+  .el-select{
+    width: 220px;
+  }
+  .el-input{
+    width: 220px;
+  }
+  .el-date-picker{
+    width: 220px;
+  }
 }
 
 </style>

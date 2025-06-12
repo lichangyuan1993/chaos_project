@@ -30,23 +30,6 @@ const memberTableState = reactive({
   },
   onClickGetMemberList() {
     fetchData(this.request.url, this.request.param).then((data) => {
-      // 一、响应式失效：reactive 不追踪对象整体替换
-      /*
-       * 这是在替换整个 data 对象的引用，而 Vue 的响应式系统无法检测到这种嵌套属性的整体替换，导致：
-       * 1. 响应性丢失：视图不会更新。
-       * 2. data 变成普通对象：不再是响应式的。
-       * */
-      // this.data = data;
-
-      // 二、手动赋值，响应式有效
-      // this.data.list = data.list;
-      // this.data.pageNum = data.pageNum;
-      // this.data.pageSize = data.pageSize;
-      // this.data.total = data.total;
-      // this.data.pages = data.pages;
-
-      // 三、使用ref报错this.data, 然后展开this.data赋值
-      // this.data.value = {...this.data.value, ...data}
       this.response = { ...this.response, ...data }
       console.log('clickGetMemberList', this)
     })
@@ -100,7 +83,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.member-view {
+.ui-member {
   width: 100%;
   background-color: #282828;
   color: #1a1a1a;
