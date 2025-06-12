@@ -3,10 +3,6 @@ import { onMounted, reactive } from 'vue'
 import type { Member, MemberPage } from '@/views/member/types/MemberInterface.d.ts'
 import { request } from '@/utils/request'
 import { fetchData } from '@/utils/fetch'
-import { MEMBER_DICTIONARY, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary'
-import MemberMainForm from '@/views/member/component/MemberMainForm.vue'
-// 引入本地数据集
-import MemberDateSet from '@/views/member/datum/member-list.json'
 
 // action case: 获取会员列表
 const memberTableState = reactive({
