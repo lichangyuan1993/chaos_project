@@ -77,6 +77,10 @@ const { menuTitle, updateMenuTitle } = inject("menuTitle");
   min-height: 100%;
   border-radius: inherit;
   border: 0;
+  background-color: #C4D1C9;
+  ul{
+    background-color: #C4D1C9;
+  }
 }
 
 </style>

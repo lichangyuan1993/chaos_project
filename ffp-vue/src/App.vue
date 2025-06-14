@@ -68,6 +68,8 @@ provide("menuTitle", { menuTitle, updateMenuTitle });
     grid-area: nav-menu;
     /*    background: #1e5489;*/
     grid-column: span 15;
+    background-color: #3A6A70;
+
   }
 
   &__header {
