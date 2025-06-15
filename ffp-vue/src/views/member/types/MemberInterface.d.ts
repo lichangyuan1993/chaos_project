@@ -37,7 +37,51 @@ export interface Member {
   updateUser: string
 }
 
+export interface MemberIdentityDocument {
+  [key: string]: any
+  recId: string
+  memberRecId: string
+  idType: string
+  idNumber: string
+  countryOfIssue: string
+  issueDate: string
+  expireDate: string
+  primaryInd: string
+  sequenceNumber: number
+  verifyDateTime: string
+  verifyStatus: string
+  versionNumber: number
+  createTimestamp: string
+  updateTimestamp: string
+  createUser: string
+  updateUser: string
+}
+
+export interface MemberFile{
+  [key: string]: any
+  recId: string
+  memberRecId: string
+  relationTable: string
+  fileName: string
+  fileType: string
+  fileSize: number
+  fileContent: string
+  uploadDateTime: string
+  createTimestamp: string
+  updateTimestamp: string
+  createUser: string
+  updateUser: string
+  versionNumber: number
+  deleted: string
+}
+
+export interface MemberRemarkDocumentMap {
+  key: string,
+  value: string,
+}
+
 export interface MemberPage {
+  [key: string]: any
   list: Member[]
   pageNum: number
   pageSize: number

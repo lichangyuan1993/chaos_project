@@ -1,0 +1,44 @@
+/* 1 */
+@font-face {
+  font-family: MapleMonoNormalNL-NF-CN-ExtraLight;
+  src: url('MapleMonoNormalNL-NF-CN-ExtraLight.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2 */
+@font-face {
+  font-family: MapleMonoNormalNL-NF-CN-Light;
+  src: url('MapleMonoNormalNL-NF-CN-Light.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3 */
+@font-face {
+  font-family: MapleMonoNormalNL-NF-CN-Medium;
+  src: url('MapleMonoNormalNL-NF-CN-Medium.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 4 */
+@font-face {
+  font-family: MapleMonoNormalNL-NF-CN-Regular;
+  src: url('MapleMonoNormalNL-NF-CN-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 5 */
+@font-face {
+  font-family: MapleMonoNormalNL-NF-CN-Thin;
+  src: url('MapleMonoNormalNL-NF-CN-Thin.ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

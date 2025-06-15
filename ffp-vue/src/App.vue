@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import NavigationMenu from "@/components/NavigationMenu.vue";
-import { inject, provide, reactive, ref } from "vue";
-import { Document, Setting } from "@element-plus/icons-vue";
+import { RouterView } from "vue-router";
+import { provide, reactive, ref } from "vue";
+import Navbar from "@/components/Navbar.vue";
+import "@/assets/base.css";
 
 
 const appState = reactive({
@@ -26,26 +26,26 @@ provide("menuTitle", { menuTitle, updateMenuTitle });
 </script>
 
 <template>
-  <div class="ui">
-    <div class="ui__nav-menu">
-      <NavigationMenu />
-
+  <div class="app">
+    <div class="app__navbar">
+      <Navbar />
     </div>
     <!--  内容区域   -->
-    <div class="ui__header">
-      <div class="ui__title">
-        <h1>{{ menuTitle }}</h1>
+    <div class="app__header">
+      <div class="app__title">
+        <!--        <h1>{{ menuTitle }}</h1>-->
+        <h1>首页</h1>
       </div>
-      <div class="ui__search">
+      <div class="app__search">
         <input type="text" placeholder="Search...">
         <input type="button" value="Search">
       </div>
     </div>
     <!--   主内容区   -->
-    <div class="ui__body">
+    <div class="app__main">
       <RouterView />
     </div>
-    <div class="ui__footer">
+    <div class="app__footer">
       footer
     </div>
   </div>
@@ -53,55 +53,71 @@ provide("menuTitle", { menuTitle, updateMenuTitle });
 </template>
 
 <style lang="scss">
-.ui {
+.app {
   display: grid;
+  margin: 0;
+  padding: 3px;
+  width: 100vw;
+  height: 100vh;
   grid-template-areas:
-    "nav-menu header"
-    "nav-menu body"
-    "nav-menu footer";
-  gap: 0.2rem;
-  grid-template-columns:repeat(100, 1fr);
-  grid-template-rows: 3rem 1fr 1.5rem;
-  min-height: 100vh;
-
-  &__nav-menu {
-    grid-area: nav-menu;
-    /*    background: #1e5489;*/
-    grid-column: span 15;
-    background-color: #3A6A70;
-
+    "navbar  header "
+    "navbar  main"
+    "navbar footer";
+  grid-gap: 3px 3px;
+  grid-template-columns:200px 1fr;
+  grid-template-rows: 3rem auto 1.5rem;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  /* 直接子元素边框样式 */
+  > * {
+    border-radius: var(--button-radius);
+    border: var(--button-border);
+  }
+  /* 导航栏样式 */
+  &__navbar {
+    grid-area: navbar;
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+    background-color: var(--navbar-bg-color);
+    color: var(--navbar-font-color);
+    //background: linear-gradient(to bottom, var(--main-bg-deep-color), var(--main-bg-pale-color));
+    /* 滚动条 */
+    overflow: scroll;
+    scrollbar-width: none;
+    scrollbar-color: var(--navbar-bg-color) transparent;
   }
 
+
+  /* 头部栏样式 */
   &__header {
     grid-area: header;
-    grid-column: span 85;
-    display: flex;
-    background-color: #2c3e50;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
+    background-color: var(--header-bg-color);
+    color: var(--header-font-color);
   }
 
-  &__body {
-    grid-area: body;
-    background: #f9f9f9;
-    grid-column: span 85;
+  &__header h1, h2, h3, h4, h5, h6 {
+    margin: 4px 1rem 4px 2rem;
+  }
+
+  &__main {
+    grid-area: main;
+    background-color: var(--main-bg-color);
+    //background: linear-gradient(to bottom, var(--main-bg-deep-color), var(--main-bg-pale-color));
+    transition: background 1.2s ease;
+    color: var(--main-font-color);
+    padding: 1rem;
+    overflow: auto;
   }
 
   &__footer {
     grid-area: footer;
-    background: skyblue;
-    grid-column: span 85;
+    background-color: var(--footer-bg-color);
+    color: var(--footer-font-color);
+    padding: 0 2rem;
   }
 
 }
 
-.ui > * {
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 0 solid rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  transition: border-radius 0.3s ease;
-}
 
 </style>

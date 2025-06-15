@@ -1,0 +1,72 @@
+/* 一元人民币色系 */
+:root.one-theme {
+  --bg-color: #FAF2CB;
+  --font-color: #FAF2CB;
+  --border-bg-color: #FAF2CB;
+
+  --primary-color:  #566c44;
+  --seconddary-color: #FAF2CB;
+
+  /* 导航栏色 */
+  --navbar-bg-color: #6B8857;
+  --navbar-font-color: var(--font-color);
+  /* 页头色 */
+  --header-bg-color: #6B8857;
+  /* 主内容色 */
+  --main-bg-color: #A7C190;
+  --main-font-color: var(--primary-color);
+  /* 页脚栏色 */
+  --footer-bg-color: #A7C190;
+
+  /* 按钮色 */
+  --button-bg-color: #566c44;
+  --button-font-color: var(--font-color);
+  --button-hover-bg-color: #566c44;
+
+}
+
+/* 五元人民币色系 */
+:root.five-theme {
+  --font-color: #6C4D7E;
+  --border-color: #795F9C;
+  --navbar-color: #B484B0;
+  --header-color: #B484B0;
+  --footer-color: #B484B0;
+  --default-color: #EEDACA;
+  --main-color: #F0D8F0;
+  --bg-color: #FFFFFF;
+}
+
+/* 十元人民币色系 */
+:root.ten-theme {
+  --font-color: #325969;
+  --border-color: #4c697a;
+  --navbar-color: #6c8fa9;
+  --header-color: #6c8fa9;
+  --footer-color: #6c8fa9;
+  --default-color: #99c4cf;
+  --main-color: #cddae2;
+  --bg-color: #FFFFFF;;
+}
+
+/* 二十元人民币色系 */
+.twenty-theme {
+
+}
+
+/* 五十元人民币色系 */
+.fifty-theme {
+  --font-color: #E0E0E0;
+  --border-color: #5A5A5A;
+  --navbar-color: #424242;
+  --header-color: #424242;
+  --footer-color: #424242;
+  --default-color: #616161;
+  --main-color: #757575;
+  --bg-color: #212121;
+}
+
+/* 二十元人民币色系 */
+.on-hundred-theme {
+
+}

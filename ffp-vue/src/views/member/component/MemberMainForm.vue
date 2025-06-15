@@ -6,23 +6,23 @@
              style="max-width: 600px"
              class="demo-form-inline">
       <!--   中文姓   -->
-      <el-form-item :label="MEMBER_DICTIONARY.familyNameCn">
+      <el-form-item :label="MEMBER.familyNameCn">
         <el-input v-model="memberFormState.data.familyNameCn" placeholder="" clearable />
       </el-form-item>
       <!--   中文名   -->
-      <el-form-item :label="MEMBER_DICTIONARY.givenNameCn">
+      <el-form-item :label="MEMBER.givenNameCn">
         <el-input v-model="memberFormState.data.givenNameCn" placeholder="" clearable/>
       </el-form-item>
       <!--   英文姓   -->
-      <el-form-item :label="MEMBER_DICTIONARY.familyNameEn">
+      <el-form-item :label="MEMBER.familyNameEn">
         <el-input v-model="memberFormState.data.familyNameEn" placeholder="" clearable />
       </el-form-item>
       <!--   英文名   -->
-      <el-form-item :label="MEMBER_DICTIONARY.givenNameEn">
+      <el-form-item :label="MEMBER.givenNameEn">
         <el-input v-model="memberFormState.data.givenNameEn" placeholder="" clearable />
       </el-form-item>
       <!--   性别    -->
-      <el-form-item :label="MEMBER_DICTIONARY.gender">
+      <el-form-item :label="MEMBER.gender">
         <el-select v-model="memberFormState.data.gender" placeholder="" clearable>
           <el-option label="男" value="M" />
           <el-option label="女" value="F" />
@@ -32,7 +32,7 @@
       </el-form-item>
 
       <!--   国籍    -->
-      <el-form-item :label="MEMBER_DICTIONARY.nationality">
+      <el-form-item :label="MEMBER.nationality">
         <el-select v-model="memberFormState.data.nationality" placeholder="" clearable>
           <el-option label="中国" value="cn" />
           <el-option label="美国" value="us" />
@@ -42,7 +42,7 @@
       </el-form-item>
 
       <!--   入会时间    -->
-      <el-form-item :label="MEMBER_DICTIONARY.enrollmentDate">
+      <el-form-item :label="MEMBER.enrollmentDate">
         <el-date-picker
           v-model="memberFormState.data.enrollmentDate"
           type="date"
@@ -52,7 +52,7 @@
       </el-form-item>
 
       <!--   会员等级    -->
-      <el-form-item :label="MEMBER_DICTIONARY.membershipTier">
+      <el-form-item :label="MEMBER.membershipTier">
         <el-select v-model="memberFormState.data.membershipTier" placeholder="" clearable>
           <el-option label="小飞人卡" value="cn" />
           <el-option label="普卡" value="STANDARD" />
@@ -69,7 +69,7 @@
       </el-form-item>
 
       <!--   会员状态    -->
-      <el-form-item :label="MEMBER_DICTIONARY.membershipStatus">
+      <el-form-item :label="MEMBER.membershipStatus">
         <el-select v-model="memberFormState.data.membershipStatus" placeholder="" clearable>
           <el-option label="活跃" value="ACTIVE" />
           <el-option label="黑名单" value="BLACK" />
@@ -94,7 +94,7 @@ import type { Member } from '@/views/member/types/MemberInterface.d.ts'
 import {
   MEMBER_KEYS,
   MEMBER_TABLE_KEYS,
-  MEMBER_DICTIONARY,
+  MEMBER,
 } from '@/views/member/dictionary/MemberDictionary.ts'
 import type { FormItemProps, FormProps } from "element-plus";
 import { request } from "@/utils/request.ts";

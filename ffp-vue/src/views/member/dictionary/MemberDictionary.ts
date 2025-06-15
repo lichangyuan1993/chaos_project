@@ -1,4 +1,4 @@
-export const MEMBER_DICTIONARY = {
+export const MEMBER = {
   recId: '数据主键',
   memberId: '会员编号',
   membershipNumber: '会员卡号',
@@ -32,10 +32,46 @@ export const MEMBER_DICTIONARY = {
   updateUser: '更新人',
 }
 
+export const MEMBER_IDENTITY_DOCUMENT = {
+  recId: '数据主键',
+  memberRecId: '会员数据主键',
+  idType: '证件类型',
+  idNumber: '证件号码',
+  countryOfIssue: '证件签发国家',
+  issueDate: '证件签发日期',
+  expireDate: '证件到期日',
+  primaryInd: '是否主证件',
+  verifyStatus: '证件验证状态',
+  verifyDateTime: '证件验证时间',
+  sequenceNumber: '序号',
+  createTimestamp: '创建时间',
+  updateTimestamp: '更新时间',
+  createUser: '创建人',
+  updateUser: '更新人',
+  versionNumber: '版本号',
+  deleted: '删除标识'
+}
+export const MEMBER_FILE = {
+  recId: '数据主键',
+  memberRecId: '会员数据主键',
+  relationTable: '关联表',
+  fileName: '文件名',
+  fileType: '文件类型',
+  fileSize: '文件大小',
+  fileContent: '文件内容',
+  uploadDateTime: '上传时间',
+  createTimestamp: '创建时间',
+  updateTimestamp: '更新时间',
+  createUser: '创建人',
+  updateUser: '更新人',
+  versionNumber: '版本号',
+  deleted: '删除标识'
+}
 
-export const MEMBER_ENTRIES = Object.entries(MEMBER_DICTIONARY)
 
-export const MEMBER_KEYS = Object.keys(MEMBER_DICTIONARY)
+export const MEMBER_ENTRIES = Object.entries(MEMBER)
+
+export const MEMBER_KEYS = Object.keys(MEMBER)
 
 export const MEMBER_TABLE_KEYS = [
   'memberId',

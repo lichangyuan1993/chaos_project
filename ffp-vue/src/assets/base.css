@@ -1,46 +1,114 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* 十元人民币色系 */
+:root {
+  /* 基础色 */
+  --bg-color: #C4D1C9;
+  --font-color: #C4D1C9;
+  --border-color: #C4D1C9;
+
+  --primary-color: #325969;
+  --secondary-color: #C4D1C9;
+
+  /* 导航栏色 */
+  --navbar-bg-color: #3A6A70;
+  --navbar-font-color: var(--font-color);
+  --navvar-bg-deep-color: #3A6A70;
+  --navbar-bg-pale-color: #7BA7AB;
+
+  /* 页头栏色 */
+  --header-bg-color: #3A6A70;
+  --header-font-color: var(--font-color);
+
+  /* 主内容栏色 */
+  --main-bg-color: #7BA7AB;
+  --main-bg-deep-color: #3A6A70;
+  --main-bg-pale-color: #7BA7AB;
+  --main-font-color: var(--primary-color);
+
+  /* 页脚栏色 */
+  --footer-bg-color: #7BA7AB;
+  --footer-font-color: var(--header-bg-color);
+
+  /* 按钮色 */
+  --button-bg-color: #325969;
+  --button-font-color: #C4D1C9;
+  --button-border-color: #C4D1C9;
+
+  /* 主按钮色 */
+  --button-bg-primary-color: var(--button-bg-color);
+  --button-font-primary-color: var(--button-font-color);
+  --button-border-primary-color: var(--button-border-color);
+  /* 主按钮 hover */
+  --button-bg-hover-primary-color: var(--button-bg-primary-color);
+  --button-font-hover-primary-color: var(--button-bg-primary-color);
+  --button-border-hover-primary-color: var(--button-border-primary-color);
+  /* 主按钮 active，主按钮背景色和字体色互换 */
+  --button-bg-active-primary-color: var(--button-font-color);
+  --button-font-active-primary-color: var(--button-bg-color);
+  --button-border-active-primary-color: var(--button-border-color);
 
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
+  /* 按钮副色 TODO */
+  --button-bg-secondary-color: #6B8857;
+  --button-bg-hover-secondary-color: #5D8F95;
+  --button-bg-active-secondary-color: var(--bg-color);
+  /* 字体颜色变化 */
+  --button-font-secondary-color: #E0E8E6;
+  --button-font-hover-secondary-color: #E0E8E6;
+
+  /* 输入框色 */
+  --input-font-primary-color: var(--primary-color);
+
+  /* 边框曲率*/
+  --border-radius: 6px;
+  --button-radius: 6px;
+  /* 边框线宽度，样式，颜色 */
+  --border: 0px solid #C4D1C9;
+  --button-border: 0px solid #C4D1C9;
+  background: linear-gradient(to right, #cddae2, #dee6ea, #eef3f5, #ffffff);
 }
 
-
-body {
-  margin: 0;
-  display: block;
-  min-width: 800px;
-  min-height: 600px;
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a,.green {
+/* 连接，按钮，输入框 */
+a, button, input, select {
+  border-radius: var(--button-radius);
+  border: 2px solid transparent;
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+  font-size: 1rem;
+  padding: 4px 4px;
+  margin: 8px 8px;
+  box-sizing: border-box;
+}
+/* 按钮 */
+button {
+  background-color: var(--button-bg-primary-color);
+  color: var(--button-font-primary-color);
+  transition: all 0.4s;
+}
+input {
+  background-color: var(--bg-color);
+  color: var(--input-font-primary-color);
+}
+/* 修改所有 select 的选项样式 */
+select, option {
+  color: #325969; /* 使用项目中的主色 */
+  background-color: #C4D1C9; /* 使用项目中的背景色 */
 }
 
+/* 统一设置所有可交互元素的焦点样式 */
+input:focus, button:focus, select:focus, a:focus {
+  outline-color: var(--primary-color);
+//box-shadow: 0 0 10px rgba(196, 209, 201, 0.5); /* 添加发光效果增强视觉 */
+}
+
+
+
+button:hover {
+  border:  2px solid var(--border-color);
+}
+button:active{
+  background-color: var(--button-bg-active-primary-color);
+  color: var(--button-font-active-primary-color);
+  /* 点击时的样式 */
+  transform: scale(0.95);
+  filter: brightness(0.9);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2) inset;
+}

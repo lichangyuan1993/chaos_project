@@ -3,7 +3,7 @@ import { onMounted, reactive } from 'vue'
 import type { Member, MemberPage } from '@/views/member/types/MemberInterface.d.ts'
 import { request } from '@/utils/request'
 import { fetchData } from '@/utils/fetch'
-import { MEMBER_DICTIONARY, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary'
+import { MEMBER, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary'
 import MemberMainForm from '@/views/member/component/MemberMainForm.vue'
 // 引入本地数据集
 import MemberDateSet from '@/views/member/datum/member-list.json'
@@ -94,7 +94,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="ui-member">
+  <div class="member-search">
     <div class="ui-member__header">
       <button @click="memberTableState.onClickGetMemberList">Get Member List</button>
       <button @click="memberTableState.onClickRefreshMemberList">Refresh Member List</button>
@@ -108,7 +108,7 @@ onMounted(() => {
           <el-table-column
             v-for="(key, index) in MEMBER_TABLE_KEYS"
             :key="index"
-            :label="MEMBER_DICTIONARY[key]"
+            :label="MEMBER[key]"
             :prop="key"
           />
 
@@ -143,7 +143,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.ui-member {
+.member-search {
   width: 100%;
   background-color: #282828;
   color: #ffffff;

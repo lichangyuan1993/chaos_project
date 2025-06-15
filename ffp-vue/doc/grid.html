@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Demo</title>
+  <link rel="stylesheet" href="./fonts.css">
+  <link rel="stylesheet" href="./theme.css">
+  <style>
+      *, *::before, *::after {
+          box-sizing: border-box;
+          font-family: MapleMonoNormalNL-NF-CN-Regular, MapleMonoNormalNL-NF-CN-Light, system-ui;
+          user-select: none;
+          user-drag: none; /* 标准语法 */
+          -webkit-user-drag: none;
+      }
+
+      /* 十元人民币色系 */
+      :root {
+          /* 背景色 */
+          /*--bg-color: #E6F0EF;*/
+          /*--bg-color: #E0E8E6;*/
+          /* 默认颜色 */
+          --bg-color: #C4D1C9;
+          --font-color: #C4D1C9;
+          --border-color: #C4D1C9;
+
+          //--primary-color: #3A6A70;
+          --primary-color: #325969;
+          --secondary-color: #C4D1C9;
+
+          /* 导航栏色 */
+          --navbar-bg-color: #3A6A70;
+          --navbar-font-color: var(--font-color);
+          --navvar-bg-deep-color: #3A6A70;
+          --navbar-bg-pale-color: #7BA7AB;
+
+          /* 页头栏色 */
+          --header-bg-color: #3A6A70;
+          --header-font-color: var(--font-color);
+
+          /* 主内容栏色 */
+          --main-bg-color: #7BA7AB;
+          --main-bg-deep-color: #3A6A70;
+          --main-bg-pale-color: #7BA7AB;
+          --main-font-color: var(--primary-color);
+
+          /* 页脚栏色 */
+          --footer-bg-color: #7BA7AB;
+          --footer-font-color: var(--header-bg-color);
+
+          /* 按钮色 */
+          --button-bg-color: #325969;
+          --button-font-color: #C4D1C9;
+          --button-border-color: #C4D1C9;
+
+          /* 主按钮色 */
+          --button-bg-primary-color: var(--button-bg-color);
+          --button-font-primary-color: var(--button-font-color);
+          --button-border-primary-color: var(--button-border-color);
+          /* 主按钮 hover */
+          --button-bg-hover-primary-color: var(--button-bg-primary-color);
+          --button-font-hover-primary-color: var(--button-bg-primary-color);
+          --button-border-hover-primary-color: var(--button-border-primary-color);
+          /* 主按钮 active，主按钮背景色和字体色互换 */
+          --button-bg-active-primary-color: var(--button-font-color);
+          --button-font-active-primary-color: var(--button-bg-color);
+          --button-border-active-primary-color: var(--button-border-color);
+
+
+          /* 按钮副色 TODO */
+          --button-bg-secondary-color: #6B8857;
+          --button-bg-hover-secondary-color: #5D8F95;
+          --button-bg-active-secondary-color: var(--bg-color);
+          /* 字体颜色变化 */
+          --button-font-secondary-color: #E0E8E6;
+          --button-font-hover-secondary-color: #E0E8E6;
+
+          /* 输入框色 */
+          --input-font-primary-color: var(--primary-color);
+
+          /* 边框曲率*/
+          --border-radius: 6px;
+          --button-radius: 6px;
+          /* 边框线宽度，样式，颜色 */
+          --border: 0px solid #C4D1C9;
+          --button-border: 0px solid #C4D1C9;
+          background: linear-gradient(to right, #cddae2, #dee6ea, #eef3f5, #ffffff);
+      }
+
+      /* 连接，按钮，输入框 */
+      a, button, input,select {
+          border-radius: var(--button-radius);
+          border: 2px solid transparent;
+          text-decoration: none;
+          font-size: 1rem;
+          padding: 4px 12px;
+          margin: 8px 8px;
+          box-sizing: border-box;
+      }
+      /* 按钮 */
+      button {
+          background-color: var(--button-bg-primary-color);
+          color: var(--button-font-primary-color);
+          transition: all 0.4s;
+      }
+      input {
+          background-color: var(--bg-color);
+          color: var(--input-font-primary-color);
+      }
+
+      /* 统一设置所有可交互元素的焦点样式 */
+      input:focus, button:focus, select:focus, a:focus {
+          outline-color: var(--primary-color);
+          //box-shadow: 0 0 10px rgba(196, 209, 201, 0.5); /* 添加发光效果增强视觉 */
+      }
+
+
+
+      button:hover {
+          border:  2px solid var(--border-color);
+      }
+      button:active{
+          background-color: var(--button-bg-active-primary-color);
+          color: var(--button-font-active-primary-color);
+          /* 点击时的样式 */
+          transform: scale(0.95);
+          filter: brightness(0.9);
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2) inset;
+      }
+
+
+      /* body元素和直接子元素 */
+      .ui-body > * {
+          border-radius: var(--button-radius);
+          border: var(--button-border);
+      }
+
+      .ui-body {
+          display: grid;
+          margin: 0;
+          padding: 3px;
+          width: 100vw;
+          height: 100vh;
+          grid-template-areas:
+                "navbar  header "
+                "navbar  main"
+                "navbar footer";
+          grid-gap: 3px 3px;
+          grid-template-columns:200px 1fr;
+          grid-template-rows: 3rem auto 1.5rem;
+          background-color: var(--bg-color);
+          color: var(--font-color);
+      }
+
+      /* 导航栏样式 */
+      .ui-navbar {
+          grid-area: navbar;
+          display: flex;
+          padding: 1rem;
+          flex-direction: column;
+          background-color: var(--navbar-bg-color);
+          color: var(--navbar-font-color);
+          //background: linear-gradient(to bottom, var(--main-bg-deep-color), var(--main-bg-pale-color));
+          /* 滚动条 */
+          overflow: scroll;
+          scrollbar-width: none;
+          scrollbar-color: var(--navbar-bg-color) transparent;
+      }
+      /* WebKit 浏览器滚动条定制 */
+      .ui-navbar::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+      }
+
+      /* 隐藏滚动条的头尾按钮 */
+      .ui-navbar::-webkit-scrollbar-button {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+      }
+
+      .ui-navbar::-webkit-scrollbar-track {
+          background: transparent;
+          border-radius: 4px;
+      }
+
+      .ui-navbar::-webkit-scrollbar-thumb {
+          background: transparent;
+          border-radius: 4px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+      }
+
+      .ui-navbar::-webkit-scrollbar-thumb:hover {
+          background: transparent;
+      }
+
+      .ui-navbar a {
+          padding: 6px 1rem;
+          margin: 4px 0;
+          color: var(--navbar-font-color);
+      }
+
+      .ui-navbar > a:hover{
+          box-shadow: 0 4px 8px rgba(93, 143, 149, 0.25);
+          border: 2px solid var(--border-color);
+          background: linear-gradient(135deg, #7BA7AB, #5D8F95);
+          transition: all 0.4s; /* 统一过渡 */
+      }
+
+      /* 头部样式 */
+      .ui-header {
+          grid-area: header;
+          background-color: var(--header-bg-color);
+          color: var(--header-font-color);
+      }
+
+      .ui-header h1, h2, h3, h4, h5, h6 {
+          margin: 4px 1rem 4px 2rem;
+      }
+
+      /* 主体样式 */
+      .ui-main {
+          grid-area: main;
+          background-color: var(--main-bg-color);
+          //background: linear-gradient(to bottom, var(--main-bg-deep-color), var(--main-bg-pale-color));
+          transition: background 1.2s ease;
+          color: var(--main-font-color);
+          padding: 1rem;
+      }
+
+      /* 脚部样式 */
+      .ui-footer {
+          grid-area: footer;
+          background-color: var(--footer-bg-color);
+          color: var(--footer-font-color);
+          padding:  0 2rem;
+      }
+
+      a[href="javascript:void(0);"] {
+          cursor: pointer; /* 显示手型光标 */
+      }
+
+  </style>
+  <script>
+    function changeTheme(theme) {
+      console.log( 'theme',theme);
+      // document.body.className = "ui-body " + theme; // 只作用于 body
+      document.documentElement.className = theme; // 作用到 html 元素
+    }
+  </script>
+</head>
+<body class="ui-body">
+<nav class="ui-navbar">
+  <a style="" href="#">📊</a>
+  <a>会员入会</a>
+  <a>批量入会</a>
+  <a >会员综合查询</a>
+  <a>会员信息修改</a>
+  <a>会员信息查询</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理</a>
+  <a>受益人管理受益人管理受益人管理</a>
+
+  <a href="#">受益人管理</a>
+</nav>
+<header class="ui-header">
+  <h1>首页</h1>
+</header>
+<main class="ui-main">
+  ui-main
+  <button onclick="changeTheme('one-theme')">1元</button>
+  <button onclick="changeTheme('five-theme')">5元</button>
+  <button onclick="changeTheme('ten-theme')">10元</button>
+  <button onclick="changeTheme('twenty-theme')">20元</button>
+  <button onclick="changeTheme('fifty-theme')">50元</button>
+  <button onclick="changeTheme('on-hundred-theme')">100元</button>
+  <div>
+    <label>中文姓名：
+      <input type="text" />
+    </label>
+    <label>英文姓名：
+      <input type="text" />
+    </label>
+    <label>英文姓名：
+      <input type="text" />
+    </label>
+    <button onclick="changeTheme('on-hundred-theme')">100元</button>
+    <button onclick="changeTheme('on-hundred-theme')">100元</button>
+    <button onclick="changeTheme('on-hundred-theme')">100元</button>
+    <button onclick="changeTheme('on-hundred-theme')">100元</button>
+    <div>
+      <button onclick="changeTheme('on-hundred-theme')">100元</button>
+    </div>
+    <div>
+      <button onclick="changeTheme('on-hundred-theme')">100元</button>
+    </div>
+
+
+
+
+
+  </div>
+</main>
+
+<footer class="ui-footer">
+  ui-footer
+</footer>
+
+</body>
+</html>

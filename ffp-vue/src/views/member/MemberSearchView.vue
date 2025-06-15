@@ -3,7 +3,7 @@ import { onMounted, reactive } from 'vue'
 import type { Member, MemberPage } from '@/views/member/types/MemberInterface.d.ts'
 import { request } from '@/utils/request'
 import { fetchData } from '@/utils/fetch'
-import { MEMBER_DICTIONARY, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary'
+import { MEMBER, MEMBER_TABLE_KEYS } from '@/views/member/dictionary/MemberDictionary'
 import MemberMainForm from '@/views/member/component/MemberMainForm.vue'
 
 // action case: 获取会员列表
@@ -72,21 +72,21 @@ const onClickOpenDeletor = (index: number, row: Member) => {
 </script>
 
 <template>
-  <div class="ui-member">
-    <div class="ui-member__header">
+  <div class="member-search">
+    <div class="member-search__header">
       <button @click="memberTableState.onClickGetMemberList">Get Member List</button>
       <button @click="memberTableState.onClickRefreshMemberList">Refresh Member List</button>
     </div>
-    <div class="ui-member__body">
+    <div class="member-search__body">
       <!-- 会员列表表格数据 -->
-      <div class="member-table">
+      <div class="member-search__table">
         <!-- 会员列表 -->
         <el-table :data="memberTableState?.response?.list" style="width: 100%">
           <!--数据行-->
           <el-table-column
             v-for="(key, index) in MEMBER_TABLE_KEYS"
             :key="index"
-            :label="MEMBER_DICTIONARY[key]"
+            :label="MEMBER[key]"
             :prop="key"
           />
 
@@ -120,10 +120,9 @@ const onClickOpenDeletor = (index: number, row: Member) => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-.ui-member {
+<style lang="scss">
+.member-search {
   width: 100%;
-  background-color: #282828;
 
   &__header {
     display: flex;
@@ -139,6 +138,11 @@ const onClickOpenDeletor = (index: number, row: Member) => {
     width: 100%;
     background-color: #1e5489;
     color: yellow;
+    border-radius: 6px;
   }
+}
+
+table{
+  border-radius:6px;
 }
 </style>

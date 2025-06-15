@@ -79,7 +79,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.ui-member {
+.member-search {
   width: 100%;
   background-color: #282828;
   color: #1a1a1a;
