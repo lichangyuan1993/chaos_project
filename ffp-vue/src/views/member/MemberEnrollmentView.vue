@@ -54,23 +54,24 @@ const onClear = (event: Event) => {
   <div class="enrollment">
     <form class="enrollment-form">
       <div class="enrollment-form__familyNameCn">
-        <label> {{ MEMBER.familyNameCn }}：<input type="text" v-model="memberFormState.data.familyNameCn"></label>
+        <label> {{ MEMBER.familyNameCn }}：</label>
+        <input type="text" v-model="memberFormState.data.familyNameCn">
       </div>
       <div class="enrollment-form__givenNameCn">
-        <label> {{ MEMBER.givenNameCn }}：<input type="text"
-                                                v-model="memberFormState.data.givenNameCn"></label>
+        <label> {{ MEMBER.givenNameCn }}：</label>
+        <input type="text" v-model="memberFormState.data.givenNameCn">
       </div>
       <div class="enrollment-form__familyNameEn">
-        <label> {{ MEMBER.familyNameEn }}：<input type="text"
-                                                 v-model="memberFormState.data.givenNameEn"></label>
+        <label> {{ MEMBER.familyNameEn }}：</label>
+        <input type="text" v-model="memberFormState.data.givenNameEn">
       </div>
       <div class="enrollment-form__givenNameEn">
-        <label> {{ MEMBER.familyNameEn }}：<input type="text"
-                                                 v-model="memberFormState.data.givenNameEn"></label>
+        <label> {{ MEMBER.familyNameEn }}：</label>
+        <input type="text" v-model="memberFormState.data.givenNameEn">
       </div>
       <div class="enrollment-form__idType">
-        <label> {{ MEMBER_IDENTITY_DOCUMENT.idType }}：<select type="text"
-                                                              v-model="memberFormState.data.idType">
+        <label> {{ MEMBER_IDENTITY_DOCUMENT.idType }}：</label>
+        <select type="text" v-model="memberFormState.data.idType">
           <option value="">请选择证件类型</option>
           <option value="ID">身份证</option>
           <option value="PASSPORT">护照</option>
@@ -82,50 +83,46 @@ const onClear = (event: Event) => {
           <option value="POLICE_ID">警察身份证</option>
           <option value="SOLDIER_ID">军人身份证</option>
           <option value="OFFICIAL_ID"> Official ID</option>
-
-
-        </select></label>
+        </select>
       </div>
       <div class="enrollment-form__idNumber">
-        <label> {{ MEMBER_IDENTITY_DOCUMENT.idNumber }}：<input type="text"
-                                                               v-model="memberFormState.data.membershipNumber"></label>
+        <label> {{ MEMBER_IDENTITY_DOCUMENT.idNumber }}：</label>
+        <input type="text" v-model="memberFormState.data.membershipNumber">
       </div>
       <div class="enrollment-form__dateOfBirth">
-        <label> {{ MEMBER.dateOfBirth }}：<input type="date"
-                                                v-model="memberFormState.data.dateOfBirth"></label>
+        <label> {{ MEMBER.dateOfBirth }}：</label>
+        <input type="date" v-model="memberFormState.data.dateOfBirth">
       </div>
       <div class="enrollment-form__gender">
-        <label> {{ MEMBER.gender }}：<select type="text" v-model="memberFormState.data.gender">
+        <label> {{ MEMBER.gender }}：</label>
+        <select type="text" v-model="memberFormState.data.gender">
           <option value="">请选择性别</option>
           <option value="M">男</option>
           <option value="F">女</option>
           <option value="U">未知</option>
-
-        </select></label>
+        </select>
       </div>
       <div class="enrollment-form__nationality">
-        <label> {{ MEMBER.nationality }}：<select type="text"
-                                                 v-model="memberFormState.data.nationality">
+        <label> {{ MEMBER.nationality }}：</label>
+        <select type="text" v-model="memberFormState.data.nationality">
           <option value="">请选择国籍</option>
           <option value="CN">中国</option>
           <option value="US">美国</option>
           <option value="SU">苏联</option>
           <option value="EU">欧洲</option>
-
-        </select></label>
+        </select>
       </div>
       <div class="enrollment-form__membershipTier">
-        <label> {{ MEMBER.membershipTier }}：<select type="text"
-                                                    v-model="memberFormState.data.membershipTier">
+        <label> {{ MEMBER.membershipTier }}：</label>
+        <select type="text" v-model="memberFormState.data.membershipTier">
           <option value="">请选择会员等级</option>
           <option value="STANDARD">普卡</option>
         </select>
-        </label>
       </div>
       <div class="enrollment-form__file">
-        <label>附件：<input type="file" :value="memberFormState.data.membershipTier" multiple>
-
-        </input></label>
+        <label>附件：</label>
+        <input type="file" :value="memberFormState.data.membershipTier" multiple>
+        </input>
       </div>
       <div class="enrollment-form__button">
 <!--        <div class="enrollment-form__submit-button">-->
@@ -186,6 +183,14 @@ const onClear = (event: Event) => {
 
 .enrollment-form {
   padding: 0;
+  div {
+    display: flex;
+    align-items: center;
+  }
+  label {
+    width: 5.5rem;
+    white-space: nowrap; /* 防止标签换行 */
+  }
 }
 
 .demo-form-inline {
