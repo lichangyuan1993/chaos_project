@@ -56,7 +56,12 @@
   --button-font-hover-secondary-color: #E0E8E6;
 
   /* 输入框色 */
-  --input-font-primary-color: var(--primary-color);
+  --input-bg-color: var(--bg-color);
+  --input-font-color: var(--primary-color);
+
+  /* 选择框色 */
+  --select-bg-color: var(--bg-color);
+  --select-font-color: var(--primary-color);
 
   /* 边框曲率*/
   --border-radius: 6px;
@@ -85,12 +90,12 @@ button {
 }
 input {
   background-color: var(--bg-color);
-  color: var(--input-font-primary-color);
+  color: var(--input-font-color);
 }
 /* 修改所有 select 的选项样式 */
 select, option {
-  color: #325969; /* 使用项目中的主色 */
-  background-color: #C4D1C9; /* 使用项目中的背景色 */
+  color: var(--select-font-color); /* 使用项目中的主色 */
+  background-color: var(--bg-color); /* 使用项目中的背景色 */
 }
 
 /* 统一设置所有可交互元素的焦点样式 */
