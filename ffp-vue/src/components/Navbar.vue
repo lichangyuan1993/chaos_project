@@ -72,7 +72,7 @@ import { RouterLink } from "vue-router";
 
   &  a {
     padding: 6px 1rem;
-    margin: 4px 0;
+    margin: 4px;
     color: var(--navbar-font-color);
   }
 
@@ -82,6 +82,17 @@ import { RouterLink } from "vue-router";
     background: linear-gradient(135deg, #7BA7AB, #5D8F95);
     transition: all 0.4s; /* 统一过渡 */
   }
+  & a:focus {
+    box-shadow: 0 4px 8px rgba(93, 143, 149, 0.25);
+    border: 2px solid var(--border-color);
+    background: linear-gradient(135deg, #7BA7AB, #5D8F95);
+    transition: all 0.4s; /* 统一过渡 */
+  }
+
+
+
+
+
 
 
 }

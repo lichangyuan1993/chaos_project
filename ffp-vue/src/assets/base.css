@@ -101,7 +101,7 @@ select, option {
 /* 统一设置所有可交互元素的焦点样式 */
 input:focus, button:focus, select:focus, a:focus {
   outline-color: var(--primary-color);
-//box-shadow: 0 0 10px rgba(196, 209, 201, 0.5); /* 添加发光效果增强视觉 */
+  box-shadow: 0 0 5px rgba(196, 209, 201, 0.5); /* 添加发光效果增强视觉 */
 }
 
 

@@ -50,11 +50,11 @@ export interface MemberIdentityDocument {
   sequenceNumber: number
   verifyDateTime: string
   verifyStatus: string
-  versionNumber: number
   createTimestamp: string
   updateTimestamp: string
   createUser: string
   updateUser: string
+  versionNumber: number
 }
 
 export interface MemberFile{

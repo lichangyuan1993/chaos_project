@@ -34,22 +34,28 @@ export async function fetchData(
     body = new URLSearchParams(filteredParam).toString();
   } else if (contentType === "multipart") {
     headers["Content-Type"] = "multipart/form-data";
-    const formData = new FormData();
-    for (const key in param) {
-      if (param.hasOwnProperty(key)) {
-        if (param[key] === null || param[key] === undefined) {
-          continue
-        }
-        const value = param[key];
-        if (value instanceof File) {
-          formData.append(key, value);
-        } else {
-          formData.append(key, String(value));
+    // 如果是formdata类型，直接使用body
+    if(param instanceof FormData){
+      body = param
+    }else{
+      const formData = new FormData();
+      for (const key in param) {
+        if (param.hasOwnProperty(key)) {
+          if (param[key] === null || param[key] === undefined) {
+            continue
+          }
+          const value = param[key];
+          if (value instanceof File) {
+            formData.append(key, value);
+          } else {
+            formData.append(key, String(value));
+          }
         }
       }
+      body = formData;
     }
-    body = formData;
-    delete headers["Content-Type"];
+    debugger
+
   } else {
     throw new Error(`Unsupported content type: ${contentType}`);
   }

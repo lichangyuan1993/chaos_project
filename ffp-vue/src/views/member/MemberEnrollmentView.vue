@@ -3,8 +3,7 @@
 import { onMounted, reactive, ref } from "vue";
 import type {
   Member, MemberFile,
-  MemberIdentityDocument,
-  MemberIdentityDocumentMap
+  MemberIdentityDocument
 } from "@/views/member/types/MemberInterface.d.ts";
 import {
   MEMBER,
@@ -12,6 +11,8 @@ import {
 } from "@/views/member/dictionary/MemberDictionary.ts";
 import type { FormItemProps, FormProps } from "element-plus";
 import { request } from "@/utils/request.ts";
+import { getFileExtension } from "@/utils/StringUtils.ts"
+import {fileToBase64} from "@/utils/FileUtils.ts"
 
 const labelPosition = ref<FormProps["labelPosition"]>("left");
 const itemLabelPosition = ref<FormItemProps["labelPosition"]>("");
@@ -25,26 +26,70 @@ const props = defineProps({
   member: {} as Member
 });
 
-const memberFormState = reactive({
+const enrollmentFormState = reactive({
   data: reactive({ ...props?.member }),
   member: reactive({} as Member),
   memberIdentityDocument: reactive({} as MemberIdentityDocument),
-  memberFile: reactive({} as MemberFile),
-  memberIdentityDocumentMap: reactive({} as MemberIdentityDocumentMap)
-} as Member);
+  memberFileList: reactive([] as MemberFile[] ),
+  fileList: reactive([] as File[] )
+
+});
+
+const handleFileChange = async (event: Event) => {
+
+  const input = event.target as HTMLInputElement
+  if (!input.files) return
+  // 清空现有文件列表
+  // enrollmentFormState.memberFileList = []
+  // enrollmentFormState.fileList = []
+
+  // 处理每个文件
+  for (const file of Array.from(input.files)) {
+    try {
+      enrollmentFormState.memberFileList.push({
+        fileContent: await fileToBase64(file), // 存储Base64字符串
+        fileName: file.name,
+        fileType: getFileExtension(file.name),
+        originalFile: file // 保留原始文件引用（可选）
+      })
+    } catch (error) {
+      console.error('文件转换失败:', error)
+    }
+  }
+  console.log("file change", enrollmentFormState.fileList);
+  console.log("file change", enrollmentFormState.memberFileList);
+}
 
 
+/**
+ * 表单状态赋值
+ * @param event
+ */
 const onSubmit = (event: Event) => {
   event.preventDefault();
   console.log("submit!");
-  request("http://localhost:8080/member/create", memberFormState.data, "POST").then(res => {
+  const formData = new FormData();
+  formData.append("member", new Blob([JSON.stringify(enrollmentFormState.member)],
+    { type: 'application/json' }))
+  formData.append("memberIdentityDocument", new Blob([JSON.stringify(enrollmentFormState.memberIdentityDocument)],
+    { type: 'application/json' }))
+  formData.append("memberFileList", new Blob([JSON.stringify(enrollmentFormState.memberFileList)],
+    { type: 'application/json' }))
+  request("http://localhost:8080/member/create", formData, "POST","multipart").then(res => {
     console.log(res);
   });
 };
 
+/**
+ * 清除表单状态
+ */
 const onClear = (event: Event) => {
   event.preventDefault();
   console.log("clear!");
+  Object.assign(enrollmentFormState.member,{})
+  Object.assign(enrollmentFormState.memberIdentityDocument,{})
+  Object.assign(enrollmentFormState.memberFileList,{})
+  Object.assign(enrollmentFormState.fileList,{})
 
 };
 
@@ -55,23 +100,23 @@ const onClear = (event: Event) => {
     <form class="enrollment-form">
       <div class="enrollment-form__familyNameCn">
         <label> {{ MEMBER.familyNameCn }}：</label>
-        <input type="text" v-model="memberFormState.data.familyNameCn">
+        <input type="text" v-model="enrollmentFormState.member.familyNameCn">
       </div>
       <div class="enrollment-form__givenNameCn">
         <label> {{ MEMBER.givenNameCn }}：</label>
-        <input type="text" v-model="memberFormState.data.givenNameCn">
+        <input type="text" v-model="enrollmentFormState.member.givenNameCn">
       </div>
       <div class="enrollment-form__familyNameEn">
         <label> {{ MEMBER.familyNameEn }}：</label>
-        <input type="text" v-model="memberFormState.data.givenNameEn">
+        <input type="text" v-model="enrollmentFormState.member.givenNameEn">
       </div>
       <div class="enrollment-form__givenNameEn">
         <label> {{ MEMBER.familyNameEn }}：</label>
-        <input type="text" v-model="memberFormState.data.givenNameEn">
+        <input type="text" v-model="enrollmentFormState.member.givenNameEn">
       </div>
       <div class="enrollment-form__idType">
         <label> {{ MEMBER_IDENTITY_DOCUMENT.idType }}：</label>
-        <select type="text" v-model="memberFormState.data.idType">
+        <select type="text" v-model="enrollmentFormState.memberIdentityDocument.idType">
           <option value="">请选择证件类型</option>
           <option value="ID">身份证</option>
           <option value="PASSPORT">护照</option>
@@ -87,15 +132,15 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__idNumber">
         <label> {{ MEMBER_IDENTITY_DOCUMENT.idNumber }}：</label>
-        <input type="text" v-model="memberFormState.data.membershipNumber">
+        <input type="text" v-model="enrollmentFormState.memberIdentityDocument.membershipNumber">
       </div>
       <div class="enrollment-form__dateOfBirth">
         <label> {{ MEMBER.dateOfBirth }}：</label>
-        <input type="date" v-model="memberFormState.data.dateOfBirth">
+        <input type="date" v-model="enrollmentFormState.member.dateOfBirth">
       </div>
       <div class="enrollment-form__gender">
         <label> {{ MEMBER.gender }}：</label>
-        <select type="text" v-model="memberFormState.data.gender">
+        <select type="text" v-model="enrollmentFormState.member.gender">
           <option value="">请选择性别</option>
           <option value="M">男</option>
           <option value="F">女</option>
@@ -104,7 +149,7 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__nationality">
         <label> {{ MEMBER.nationality }}：</label>
-        <select type="text" v-model="memberFormState.data.nationality">
+        <select type="text" v-model="enrollmentFormState.member.nationality">
           <option value="">请选择国籍</option>
           <option value="CN">中国</option>
           <option value="US">美国</option>
@@ -114,14 +159,14 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__membershipTier">
         <label> {{ MEMBER.membershipTier }}：</label>
-        <select type="text" v-model="memberFormState.data.membershipTier">
+        <select type="text" v-model="enrollmentFormState.member.membershipTier">
           <option value="">请选择会员等级</option>
           <option value="STANDARD">普卡</option>
         </select>
       </div>
       <div class="enrollment-form__file">
         <label>附件：</label>
-        <input type="file" :value="memberFormState.data.membershipTier" multiple>
+        <input type="file" @change="handleFileChange"  multiple>
         </input>
       </div>
       <div class="enrollment-form__button">
