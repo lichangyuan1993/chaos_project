@@ -2,12 +2,12 @@ import {formatLocalISO} from '@/utils/datetime.ts'
 // 创建一个获取会员列表的函数
 export async function fetchData(
   url: string,
-  param: Record<string, any> = {},
+  param: Record<string, never> = {},
   method: "POST" | "GET" = "POST",
   contentType: "json" | "form" | "multipart" = "form",
   headers: Record<string, string> = {},
   body: string | FormData | undefined = undefined
-): Promise<any> {
+): Promise<never> {
   console.log("fetch", method, url, param);
 
   // 判断Date对象，格式化为字符串 yyyy-MM-dd'T'HH:mm:ss.sssZ
@@ -30,7 +30,7 @@ export async function fetchData(
         acc[key] = value;
       }
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, never>);
     body = new URLSearchParams(filteredParam).toString();
   } else if (contentType === "multipart") {
     headers["Content-Type"] = "multipart/form-data";
@@ -54,8 +54,10 @@ export async function fetchData(
       }
       body = formData;
     }
-    debugger
-
+    // 😂 必须删除上面手动给的Content-Type,否则请求头的Content-Type缺少 multipart boundary
+    // 而且 FormData会自动添加Content-Type: multipart/form-data; boundary=WebAppBoundary
+    //
+    delete headers["Content-Type"];
   } else {
     throw new Error(`Unsupported content type: ${contentType}`);
   }

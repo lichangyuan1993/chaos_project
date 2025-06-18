@@ -1,4 +1,4 @@
-<script setup lang="ts" xmlns="http://www.w3.org/1999/html">
+<script setup lang="ts">
 
 import { onMounted, reactive, ref } from "vue";
 import type {
@@ -40,8 +40,8 @@ const handleFileChange = async (event: Event) => {
   const input = event.target as HTMLInputElement
   if (!input.files) return
   // 清空现有文件列表
-  // enrollmentFormState.memberFileList = []
-  // enrollmentFormState.fileList = []
+  enrollmentFormState.memberFileList = []
+  enrollmentFormState.fileList = []
 
   // 处理每个文件
   for (const file of Array.from(input.files)) {
@@ -69,11 +69,11 @@ const onSubmit = (event: Event) => {
   event.preventDefault();
   console.log("submit!");
   const formData = new FormData();
-  formData.append("member", new Blob([JSON.stringify(enrollmentFormState.member)],
+  formData.append("memberVO", new Blob([JSON.stringify(enrollmentFormState.member)],
     { type: 'application/json' }))
-  formData.append("memberIdentityDocument", new Blob([JSON.stringify(enrollmentFormState.memberIdentityDocument)],
+  formData.append("memberIdentityDocumentVO", new Blob([JSON.stringify(enrollmentFormState.memberIdentityDocument)],
     { type: 'application/json' }))
-  formData.append("memberFileList", new Blob([JSON.stringify(enrollmentFormState.memberFileList)],
+  formData.append("memberFileVOList", new Blob([JSON.stringify(enrollmentFormState.memberFileList)],
     { type: 'application/json' }))
   request("http://localhost:8080/member/create", formData, "POST","multipart").then(res => {
     console.log(res);
@@ -116,7 +116,7 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__idType">
         <label> {{ MEMBER_IDENTITY_DOCUMENT.idType }}：</label>
-        <select type="text" v-model="enrollmentFormState.memberIdentityDocument.idType">
+        <select v-model="enrollmentFormState.memberIdentityDocument.idType">
           <option value="">请选择证件类型</option>
           <option value="ID">身份证</option>
           <option value="PASSPORT">护照</option>
@@ -140,7 +140,7 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__gender">
         <label> {{ MEMBER.gender }}：</label>
-        <select type="text" v-model="enrollmentFormState.member.gender">
+        <select v-model="enrollmentFormState.member.gender">
           <option value="">请选择性别</option>
           <option value="M">男</option>
           <option value="F">女</option>
@@ -149,7 +149,7 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__nationality">
         <label> {{ MEMBER.nationality }}：</label>
-        <select type="text" v-model="enrollmentFormState.member.nationality">
+        <select v-model="enrollmentFormState.member.nationality">
           <option value="">请选择国籍</option>
           <option value="CN">中国</option>
           <option value="US">美国</option>
@@ -159,25 +159,24 @@ const onClear = (event: Event) => {
       </div>
       <div class="enrollment-form__membershipTier">
         <label> {{ MEMBER.membershipTier }}：</label>
-        <select type="text" v-model="enrollmentFormState.member.membershipTier">
+        <select v-model="enrollmentFormState.member.membershipTier">
           <option value="">请选择会员等级</option>
           <option value="STANDARD">普卡</option>
         </select>
       </div>
       <div class="enrollment-form__file">
         <label>附件：</label>
-        <input type="file" @change="handleFileChange"  multiple>
-        </input>
+        <input type="file" @change="handleFileChange"  multiple/>
       </div>
       <div class="enrollment-form__button">
 <!--        <div class="enrollment-form__submit-button">-->
-          <button @click="onSubmit">
+          <button type="button" @click="onSubmit">
             入会
           </button>
 
 <!--        </div>-->
 <!--        <div class="enrollment-form__clear-button">-->
-          <button @click="onClear">
+          <button type="button" @click="onClear">
             清空
           </button>
 <!--        </div>-->

@@ -33,6 +33,13 @@ interface CustomerUpdate {
 #### 思路一：
    前端
 ```javascript
+// 一般请求方式
+const combinedBlob = new Blob([
+   JSON.stringify(customer),
+   file
+], { type: 'application/octet-stream' });
+
+// 改造后的样式
 const combinedBlob = new Blob([
   JSON.stringify(customer),
   '\r\n',

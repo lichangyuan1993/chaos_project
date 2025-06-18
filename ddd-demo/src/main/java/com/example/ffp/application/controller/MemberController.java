@@ -2,8 +2,7 @@ package com.example.ffp.application.controller;
 
 import com.example.ffp.application.converter.MemberConverter;
 import com.example.ffp.application.converter.PageConverter;
-import com.example.ffp.application.dto.request.MemberRequest;
-import com.example.ffp.application.dto.request.PageRequest;
+import com.example.ffp.application.dto.request.*;
 import com.example.ffp.application.dto.response.MemberResponse;
 import com.example.ffp.application.dto.response.PageResponse;
 import com.example.ffp.application.service.MemberApplicationService;
@@ -15,12 +14,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.MatrixVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -32,7 +30,7 @@ public class MemberController {
 
 
     @Resource
-    private MemberRepository  memberRepository;
+    private MemberRepository memberRepository;
 
     @PostMapping(path = "/member/get")
     public ResponseEntity<MemberResponse> getMember(MemberRequest memberRequest) {
@@ -57,16 +55,31 @@ public class MemberController {
     }
 
     @PostMapping(path = "/member/list")
-    public ResponseEntity<PageResponse<MemberResponse>> listMember(MemberRequest memberRequest,@Valid PageRequest pageRequest) {
+    public ResponseEntity<PageResponse<MemberResponse>> listMember(MemberRequest memberRequest, @Valid PageRequest pageRequest) {
         PageInfo<MemberEntity> memberEntityList = PageInfo.of(memberRepository.listMember(memberRequest, pageRequest));
 //        List<MemberResponse> memberResponseList = memberEntityList.getList().stream().map(MemberConverter.INSTANCE::toResponse).toList();
         PageResponse<MemberResponse> pageResponseList = PageConverter.INSTANCE.toResponse(memberEntityList);
         return ResponseEntity.ok(pageResponseList);
     }
 
+//    @PostMapping(path = "/member/create")
+//    public ResponseEntity<MemberResponse> createMember(MemberRequest memberRequest) throws Throwable {
+//       MemberResponse memberResponse = memberApplicationService.createMember(memberRequest);
+//       return ResponseEntity.ok(memberResponse);
+//    }
+
     @PostMapping(path = "/member/create")
-    public ResponseEntity<MemberResponse> createMember(MemberRequest memberRequest) throws Throwable {
-       MemberResponse memberResponse = memberApplicationService.createMember(memberRequest);
-       return ResponseEntity.ok(memberResponse);
+    public ResponseEntity<Map<String, Object>> createMember(
+            @RequestPart("memberVO") MemberVO memberVO,
+            @RequestPart("memberIdentityDocumentVO") MemberIdentityDocumentVO memberIdentityDocumentVO,
+            @RequestPart("memberFileVOList") List<MemberFileVO> memberFileVOList
+    ) throws Throwable {
+        Map<String, Object> stringObjectMap = new HashMap<>(){{
+            put("memberVO", memberVO);
+            put("memberIdentityDocumentVO", memberIdentityDocumentVO);
+            put("memberFileVOList", memberFileVOList);
+        }};
+        System.out.println(stringObjectMap);
+        return ResponseEntity.ok(stringObjectMap);
     }
 }

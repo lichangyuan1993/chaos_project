@@ -2,7 +2,7 @@ import { fetchData } from './fetch'
 
 export async function request<T>(
   url: string,
-  param?: Record<string, any>,
+  param?: Record<string, never>,
   method?: 'POST' | 'GET',
   contentType?: 'json' | 'form' | 'multipart',
   headers: Record<string, string> = {},
@@ -15,7 +15,7 @@ export async function request<T>(
     headers['Authorization'] = token
   }
 
-  let response = await fetchData(url, param, method, contentType, headers);
+  const response = await fetchData(url, param, method, contentType, headers);
 
   // 这是 JavaScript 的 空值合并运算符（Nullish Coalescing Operator）。
   return  response ?? {} as T

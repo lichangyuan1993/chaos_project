@@ -7,7 +7,9 @@ export const fileToBase64 = (file: File): Promise<string> => {
     reader.onload = () => {
       // 确保结果是字符串
       if (typeof reader.result === 'string') {
-        resolve(reader.result)
+        // 分割字符串并取第二部分（纯Base64）
+        const base64Data = reader.result.split(',')[1];
+        resolve(base64Data)
       } else {
         reject(new Error('Failed to read file as Base64'))
       }
