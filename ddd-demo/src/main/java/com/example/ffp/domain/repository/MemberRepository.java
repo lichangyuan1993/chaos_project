@@ -1,10 +1,9 @@
 package com.example.ffp.domain.repository;
 
-import com.example.ffp.application.dto.request.MemberRequest;
-import com.example.ffp.application.dto.request.PageRequest;
-import com.example.ffp.application.dto.response.MemberResponse;
+import com.example.ffp.interfaces.web.dto.request.MemberRequest;
+import com.example.ffp.interfaces.web.dto.request.PageRequest;
 import com.example.ffp.domain.model.Member;
-import com.example.ffp.infrastructure.persistence.entity.MemberEntity;
+import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
 
 import java.util.List;
 

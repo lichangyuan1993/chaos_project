@@ -1,8 +1,8 @@
 package com.example.ffp.application.converter;
 
-import com.example.ffp.application.dto.response.MemberResponse;
-import com.example.ffp.application.dto.response.PageResponse;
-import com.example.ffp.infrastructure.persistence.entity.MemberEntity;
+import com.example.ffp.interfaces.web.dto.response.MemberResponse;
+import com.example.ffp.interfaces.web.dto.response.PageResponse;
+import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
 import com.github.pagehelper.PageInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

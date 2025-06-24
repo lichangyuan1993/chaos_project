@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.ffp.infrastructure.persistence.mapper.MemberMapper">
+<mapper namespace="com.example.ffp.infrastructure.persistence.mybatis.mapper.MemberMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.ffp.infrastructure.persistence.entity.MemberEntity">
+    <resultMap id="BaseResultMap" type="com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity">
             <id property="recId" column="REC_ID" jdbcType="VARCHAR"/>
             <result property="memberId" column="MEMBER_ID" jdbcType="VARCHAR"/>
             <result property="membershipNumber" column="MEMBERSHIP_NUMBER" jdbcType="VARCHAR"/>
