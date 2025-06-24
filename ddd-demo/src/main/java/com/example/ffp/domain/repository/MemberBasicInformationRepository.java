@@ -9,17 +9,17 @@ import java.util.List;
 
 public interface MemberBasicInformationRepository {
 
-    MemberAggregateRoot getMemberBasicInformation(MemberId memberId);
+    Member getMemberBasicInformation(MemberId memberId);
 
-    MemberAggregateRoot getMemberProfile(MemberId memberId);
+    Member getMemberProfile(MemberId memberId);
 
-    List<MemberBasicInformation> queryMember(Member member);
+//    List<MemberBasicInformation> queryMember(Member member);
 
-    void updateMember(Member member) throws Throwable;
+//    void updateMember(Member member) throws Throwable;
 
     List<MemberEntity> listMember(PageMemberRequest pageMemberRequest);
 
-    void createMember(Member domain) throws Exception, Throwable;
+//    void createMember(Member domain) throws Exception, Throwable;
 
 
     MemberId getMemberId(MembershipNumber membershipNumber);

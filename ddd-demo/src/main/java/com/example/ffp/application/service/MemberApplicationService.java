@@ -28,8 +28,8 @@ public class MemberApplicationService {
     public MemberProfileResult getMemberBasicInformation(GetMemberQuery getMemberQuery) {
         // memberId和membershipNumber，全部转换成memberId
         MemberId memberId = getMemberId(getMemberQuery.getMemberId(), getMemberQuery.getMembershipNumber());
-        MemberAggregateRoot memberAggregateRoot = memberBasicInformationRepository.getMemberBasicInformation(memberId);
-        return memberApplicationConverter.toResult(memberAggregateRoot);
+        Member member = memberBasicInformationRepository.getMemberBasicInformation(memberId);
+        return memberApplicationConverter.toResult(member);
     }
 
     /**
@@ -37,8 +37,8 @@ public class MemberApplicationService {
      */
     public MemberProfileResult getMemberProfile(GetMemberQuery getMemberQuery) {
         MemberId memberId = getMemberId(getMemberQuery.getMemberId(), getMemberQuery.getMembershipNumber());
-        MemberAggregateRoot memberAggregateRoot = memberBasicInformationRepository.getMemberProfile(memberId);
-        return memberApplicationConverter.toResult(memberAggregateRoot);
+        Member member = memberBasicInformationRepository.getMemberProfile(memberId);
+        return memberApplicationConverter.toResult(member);
     }
 
 
@@ -66,17 +66,17 @@ public class MemberApplicationService {
      * 更新会员信息
      */
     public MemberProfileResult updateMember(UpdateMemberCommand updateMemberCommand) throws Throwable {
-        MemberAggregateRoot aggregateRoot = memberApplicationConverter.toAggregateRoot(updateMemberCommand);
+        Member aggregateRoot = memberApplicationConverter.toAggregateRoot(updateMemberCommand);
         memberDomainService.updateMember(aggregateRoot);
-        MemberAggregateRoot memberAggregateRoot = memberBasicInformationRepository.getMemberProfile(aggregateRoot.getMemberId());
-        return memberApplicationConverter.toResult(memberAggregateRoot);
+        Member member = memberBasicInformationRepository.getMemberProfile(aggregateRoot.getMemberId());
+        return memberApplicationConverter.toResult(member);
     }
 
     public MemberProfileResult createMember(CreateMemberCommand creatememberCommand) throws Throwable {
-        MemberAggregateRoot memberAggregateRoot = memberApplicationConverter.toAggregateRoot(creatememberCommand);
-        memberDomainService.enrollMember(memberAggregateRoot);
+        Member member = memberApplicationConverter.toAggregateRoot(creatememberCommand);
+        memberDomainService.enrollMember(member);
         // 确保MemberId不为空
-        MemberAggregateRoot memberBasicInformation = memberBasicInformationRepository.getMemberBasicInformation(memberAggregateRoot.getMemberId());
+        Member memberBasicInformation = memberBasicInformationRepository.getMemberBasicInformation(member.getMemberId());
         return memberApplicationConverter.toResult(memberBasicInformation);
     }
 }

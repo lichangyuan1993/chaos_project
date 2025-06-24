@@ -1,83 +1,38 @@
 package com.example.ffp.domain.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * @TableName MEMBER
- */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class Member extends BaseModel {
-    private String recId;
+public class Member {
 
-    private String memberId;
+    private MemberId memberId;
+    private MembershipNumber membershipNumber;
+    private MemberBasicInformation memberBasicInformation; // 不允许出现memberId和membershipNumber
+    private List<MemberIdentityDocument> memberIdentityDocumentList;
+    private List<MemberFile> memberFileList;
 
-    private String membershipNumber;
+    public static Member fromMemberBasicInformation(String memberId, String membershipNumber, MemberBasicInformation memberBasicInformation) {
+        Member member = new Member();
+        member.setMemberId(MemberId.from(memberId));
+        member.setMembershipNumber(MembershipNumber.from(membershipNumber));
+        member.setMemberBasicInformation(memberBasicInformation);
+        return member;
+    }
 
-    private String gender;
-
-    private LocalDate dateOfBirth;
-
-    private String familyNameCn;
-
-    private String givenNameCn;
-
-    private String familyNameEn;
-
-    private String givenNameEn;
-
-    private String nationality;
-
-    private LocalDateTime enrollmentDate;
-
-    private String sourceChannel;
-
-    private String membershipTier;
-
-    private String membershipStatus;
-
-    private LocalDate tierEffectiveDate;
-
-    private LocalDate tierExpiryDate;
-
-    private String lifetimeEliteInd;
-
-    private BigDecimal currentNauticalMile;
-
-    private BigDecimal eligibleNauticalMile;
-
-    private BigDecimal lifetimeNauticalMile;
-
-    private LocalDate nextNauticalMileExpiry;
-
-    private BigDecimal currentTierQualMile;
-
-    private Integer currentTierQualSegment;
-
-    private LocalDate tierQualStartDate;
-
-    private LocalDate tierQualEndDate;
-
-    private String pinCode;
-
-    private LocalDateTime lastActivityDate;
-
-    private LocalDateTime createTimestamp;
-
-    private LocalDateTime updateTimestamp;
-
-    private String createUser;
-
-    private String updateUser;
-
-
-
-
-
+    public static Member fromMemberProfile(
+            String memberId,
+            String membershipNumber,
+            MemberBasicInformation memberBasicInformation,
+            List<MemberIdentityDocument> memberIdentityDocumentList,
+            List<MemberFile> memberFileList) {
+        Member member = new Member();
+        member.setMemberId(MemberId.from(memberId));
+        member.setMembershipNumber(MembershipNumber.from(membershipNumber));
+        member.setMemberBasicInformation(memberBasicInformation);
+        member.setMemberIdentityDocumentList(memberIdentityDocumentList);
+        member.setMemberFileList(memberFileList);
+        return member;
+    }
 }

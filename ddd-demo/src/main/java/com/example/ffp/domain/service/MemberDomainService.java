@@ -8,7 +8,6 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 public class MemberDomainService {
@@ -37,19 +36,19 @@ public class MemberDomainService {
     /**
      * 更新会员档案
      */
-    public void updateMember(MemberAggregateRoot memberAggregateRoot) throws Throwable {
+    public void updateMember(Member member) throws Throwable {
         // TODO
-        memberBasicInformationRepository.updateMemberBasicInformation(memberAggregateRoot.getMemberBasicInformation());
-        memberBasicInformationRepository.updateMemberIdentityDocumentList(memberAggregateRoot.getMemberIdentityDocumentList());
-        memberBasicInformationRepository.updateMemberFileList(memberAggregateRoot.getMemberId());
+        memberBasicInformationRepository.updateMemberBasicInformation(member.getMemberBasicInformation());
+        memberBasicInformationRepository.updateMemberIdentityDocumentList(member.getMemberIdentityDocumentList());
+        memberBasicInformationRepository.updateMemberFileList(member.getMemberId());
 //       memberRepository.updateMember(memberAggregateRoot);
     }
 
     /**
      * 会员入会
      */
-    public void enrollMember(MemberAggregateRoot memberAggregateRoot) throws Throwable {
-        MemberBasicInformation memberBasicInformation = memberAggregateRoot.getMemberBasicInformation();
+    public void enrollMember(Member member) throws Throwable {
+        MemberBasicInformation memberBasicInformation = member.getMemberBasicInformation();
         LocalDateTime now = LocalDateTime.now();
         // TODO
         memberBasicInformation.setEnrollmentDate(now);
@@ -62,7 +61,7 @@ public class MemberDomainService {
         memberBasicInformation.setUpdateTimestamp(now);
         // TODO
         memberBasicInformationRepository.addMemberBasicInformation(memberBasicInformation);
-        memberBasicInformationRepository.addMemberIdentityDocumentList(memberAggregateRoot.getMemberId(), memberAggregateRoot.getMemberIdentityDocumentList());
-        memberBasicInformationRepository.addMemberFileList(memberAggregateRoot.getMemberId(), memberAggregateRoot.getMemberFileList());
+        memberBasicInformationRepository.addMemberIdentityDocumentList(member.getMemberId(), member.getMemberIdentityDocumentList());
+        memberBasicInformationRepository.addMemberFileList(member.getMemberId(), member.getMemberFileList());
     }
 }
