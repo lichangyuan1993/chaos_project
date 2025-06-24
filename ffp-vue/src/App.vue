@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { provide, reactive, ref } from "vue";
+import { onMounted, provide, reactive, ref } from "vue";
 import Navbar from "@/components/Navbar.vue";
 import "@/assets/base.css";
+import { drawCracks } from "@/utils/Background.ts";
 
 
 const appState = reactive({
@@ -16,10 +17,14 @@ const appState = reactive({
 
 const menuTitle = ref("");
 
+const appNavbar = ref<HTMLElement | null>();
+
 function updateMenuTitle(title: string) {
   console.log("updateMenuTitle", title);
   menuTitle.value = title;
 }
+
+
 
 provide("menuTitle", { menuTitle, updateMenuTitle });
 
@@ -27,7 +32,7 @@ provide("menuTitle", { menuTitle, updateMenuTitle });
 
 <template>
   <div class="app">
-    <div class="app__navbar">
+    <div ref="appNavbar" class="app__navbar">
       <Navbar />
     </div>
     <!--  内容区域   -->

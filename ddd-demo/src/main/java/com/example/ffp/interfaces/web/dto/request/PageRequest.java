@@ -4,13 +4,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class PageRequest {
+public abstract class PageRequest extends  Request {
     @Max(value = 100)
     private Integer pageNum;
     private Integer pageSize;

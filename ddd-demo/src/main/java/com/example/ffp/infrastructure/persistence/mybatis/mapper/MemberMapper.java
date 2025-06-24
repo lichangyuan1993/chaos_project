@@ -14,7 +14,13 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
+    String getMemberId(String membershipNumber);
+
     MemberEntity getOne(MemberEntity entity);
+
+    MemberEntity getOneByMemberId(String memberId);
+
+    MemberEntity getOneByMembershipNumber(String membershipNumber);
 
     List<MemberEntity> query(MemberEntity entity);
 

@@ -1,4 +1,4 @@
-package com.example.ffp.application.util;
+package com.example.ffp.domain.utils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class MembershipNumberGenerator {

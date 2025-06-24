@@ -1,8 +1,8 @@
 package com.example.ffp.domain.service;
 
-import com.example.ffp.domain.model.Member;
-import com.example.ffp.domain.repository.MemberRepository;
-import com.example.ffp.application.util.MembershipNumberGenerator;
+import com.example.ffp.domain.model.*;
+import com.example.ffp.domain.repository.MemberBasicInformationRepository;
+import com.example.ffp.domain.utils.MembershipNumberGenerator;
 import com.example.ffp.application.util.UniqueKey;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -14,31 +14,55 @@ import java.util.List;
 public class MemberDomainService {
 
     @Resource
-    private MemberRepository memberRepository;
+    private MemberBasicInformationRepository memberBasicInformationRepository;
 
-    public Member getMember(Member member){
-       return memberRepository.getMember(member);
-    };
+    /**
+     * 查询会员基础信息
+     *
+     */
+//    @Deprecated // TODO 删除, 因为可以直接调用repository获取会员基础信息
+//    public MemberAggregateRoot getMemberBasicInformation(MemberId memberId){
+//       return memberBasicInformationRepository.getMemberBasicInformation(memberId);
+//    };
 
-    public List<Member> queryMember(Member member) {
-        return memberRepository.queryMember(member);
+    /**
+     * 查询会员档案信息
+     */
+//    @Deprecated // TODO 删除, 因为可以直接调用repository获取会员基础信息
+//    public MemberAggregateRoot getMemberProfile(MemberId memberId){
+//        return memberBasicInformationRepository.getMemberProfile(memberId);
+//    }
+
+
+    /**
+     * 更新会员档案
+     */
+    public void updateMember(MemberAggregateRoot memberAggregateRoot) throws Throwable {
+        // TODO
+        memberBasicInformationRepository.updateMemberBasicInformation(memberAggregateRoot.getMemberBasicInformation());
+        memberBasicInformationRepository.updateMemberIdentityDocumentList(memberAggregateRoot.getMemberIdentityDocumentList());
+        memberBasicInformationRepository.updateMemberFileList(memberAggregateRoot.getMemberId());
+//       memberRepository.updateMember(memberAggregateRoot);
     }
 
-    public void updateMember(Member member) throws Throwable {
-       memberRepository.updateMember(member);
-    }
-
-    public void enrollMember(Member member) throws Throwable {
+    /**
+     * 会员入会
+     */
+    public void enrollMember(MemberAggregateRoot memberAggregateRoot) throws Throwable {
+        MemberBasicInformation memberBasicInformation = memberAggregateRoot.getMemberBasicInformation();
         LocalDateTime now = LocalDateTime.now();
-        member.setEnrollmentDate(now);
-        member.setRecId(UniqueKey.getUniqueKey());
-        member.setMemberId(UniqueKey.getUniqueKey());
-        member.setMembershipNumber(MembershipNumberGenerator.getMembershipNumber());
-        member.setUpdateUser("ADMIN");
-        member.setCreateUser("ADMIN");
-        member.setCreateTimestamp(now);
-        member.setUpdateTimestamp(now);
-
-        memberRepository.createMember(member);
+        // TODO
+        memberBasicInformation.setEnrollmentDate(now);
+        memberBasicInformation.setRecId(UniqueKey.getUniqueKey());
+        memberBasicInformation.setMemberId(UniqueKey.getUniqueKey());
+        memberBasicInformation.setMembershipNumber(MembershipNumberGenerator.getMembershipNumber());
+        memberBasicInformation.setUpdateUser("ADMIN");
+        memberBasicInformation.setCreateUser("ADMIN");
+        memberBasicInformation.setCreateTimestamp(now);
+        memberBasicInformation.setUpdateTimestamp(now);
+        // TODO
+        memberBasicInformationRepository.addMemberBasicInformation(memberBasicInformation);
+        memberBasicInformationRepository.addMemberIdentityDocumentList(memberAggregateRoot.getMemberId(), memberAggregateRoot.getMemberIdentityDocumentList());
+        memberBasicInformationRepository.addMemberFileList(memberAggregateRoot.getMemberId(), memberAggregateRoot.getMemberFileList());
     }
 }

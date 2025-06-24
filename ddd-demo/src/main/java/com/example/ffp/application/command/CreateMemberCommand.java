@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UpdateMemberCommand {
+public class CreateMemberCommand {
     private MemberBasicInformationCommand memberBasicInformationCommand;
     private MemberIdentityDocumentCommand memberIdentityDocumentCommand;
     private List<MemberFileCommand> memberFileCommandList;

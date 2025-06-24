@@ -6,9 +6,8 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class  PageResponse<T> extends Request {
+public class  PageResponse<T> {
 
     private Integer pageSize;
     private Integer pageNum;

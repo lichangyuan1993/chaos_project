@@ -388,4 +388,19 @@
             </if>
         </where>
     </select>
+    <select id="getOneByMemberId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM FFP.MEMBER
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+    <select id="getOneByMembershipNumber" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM FFP.MEMBER
+        WHERE MEMBERSHIP_NUMBER = #{membershipNumber}
+    </select>
+    <select id="getMemberId" resultType="java.lang.String">
+        SELECT MEMBER_ID
+        FROM FFP.MEMBER
+        WHERE MEMBERSHIP_NUMBER = #{membershipNumber}
+    </select>
 </mapper>
