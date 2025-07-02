@@ -7,7 +7,7 @@ public class MemberFileResult {
     private String memberId;
     private String fileName;
 
-    private MemberBasicInformationResult memberBasicInformationResult;
+    private MemberBasicInfoResult memberBasicInfoResult;
     private MemberIdentityDocumentResult memberIdentityDocumentResult;
     private MemberProfileResult memberProfileResult;
 }

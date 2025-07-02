@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ffp.infrastructure.persistence.mybatis.mapper.MemberIdentityDocumentMapper">
+
+    <resultMap id="BaseResultMap" type="MemberIdentityDocumentEntity">
+        <id property="recId" column="REC_ID" jdbcType="VARCHAR"/>
+        <result property="memberRecId" column="MEMBER_REC_ID" jdbcType="VARCHAR"/>
+        <result property="idType" column="ID_TYPE" jdbcType="VARCHAR"/>
+        <result property="idNumber" column="ID_NUMBER" jdbcType="VARCHAR"/>
+        <result property="issuingCountry" column="ISSUING_COUNTRY" jdbcType="CHAR"/>
+        <result property="issueDate" column="ISSUE_DATE" jdbcType="DATE"/>
+        <result property="expireDate" column="EXPIRE_DATE" jdbcType="DATE"/>
+        <result property="isPrimary" column="IS_PRIMARY" jdbcType="INTEGER"/>
+        <result property="verifyStatus" column="VERIFY_STATUS" jdbcType="VARCHAR"/>
+        <result property="verifiedAt" column="VERIFIED_AT" jdbcType="TIMESTAMP"/>
+        <result property="sequenceNumber" column="SEQUENCE_NUMBER" jdbcType="DECIMAL"/>
+        <result property="createdAt" column="CREATED_AT" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="UPDATED_AT" jdbcType="TIMESTAMP"/>
+        <result property="createdBy" column="CREATED_BY" jdbcType="VARCHAR"/>
+        <result property="updatedBy" column="UPDATED_BY" jdbcType="VARCHAR"/>
+        <result property="versionNumber" column="VERSION_NUMBER" jdbcType="INTEGER"/>
+        <result property="isDeleted" column="IS_DELETED" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        REC_ID,MEMBER_REC_ID,ID_TYPE,
+        ID_NUMBER,ISSUING_COUNTRY,ISSUE_DATE,
+        EXPIRE_DATE,IS_PRIMARY,VERIFY_STATUS,
+        VERIFIED_AT,SEQUENCE_NUMBER,CREATED_AT,
+        UPDATED_AT,CREATED_BY,UPDATED_BY,
+        VERSION_NUMBER,IS_DELETED
+    </sql>
+    <select id="getOneByRecId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM MEMBER_IDENTITY_DOCUMENT
+        WHERE REC_ID = #{recId}
+    </select>
+    <select id="getOneByMemberRecId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM MEMBER_IDENTITY_DOCUMENT
+        WHERE MEMBER_REC_ID = #{memberRecId}
+    </select>
+    <select id="selectByMemberRecId" resultType="MemberIdentityDocumentEntity">
+        SELECT <include refid="Base_Column_List"/>
+        FROM MEMBER_IDENTITY_DOCUMENT
+        WHERE MEMBER_REC_ID = #{memberRecId}
+    </select>
+
+    <insert id="insertBySelection" parameterType="MemberIdentityDocumentEntity">
+        INSERT INTO MEMBER_IDENTITY_DOCUMENT
+        <set>
+            <if test="recId != null">REC_ID = #{recId},</if>
+            <if test="memberRecId != null">MEMBER_REC_ID = #{memberRecId},</if>
+            <if test="idType != null">ID_TYPE = #{idType},</if>
+            <if test="idNumber != null">ID_NUMBER = #{idNumber},</if>
+            <if test="issuingCountry != null">ISSUING_COUNTRY = #{issuingCountry},</if>
+            <if test="issueDate != null">ISSUE_DATE = #{issueDate},</if>
+            <if test="expireDate != null">EXPIRE_DATE = #{expireDate},</if>
+            <if test="isPrimary != null">IS_PRIMARY = #{isPrimary},</if>
+            <if test="verifyStatus != null">VERIFY_STATUS = #{verifyStatus},</if>
+            <if test="verifiedAt != null">VERIFIED_AT = #{verifiedAt},</if>
+            <if test="sequenceNumber != null">SEQUENCE_NUMBER = #{sequenceNumber},</if>
+            <if test="createdAt != null">CREATED_AT = #{createdAt},</if>
+            <if test="updatedAt != null">UPDATED_AT = #{updatedAt},</if>
+            <if test="createdBy != null">CREATED_BY = #{createdBy},</if>
+            <if test="updatedBy != null">UPDATED_BY = #{updatedBy},</if>
+            <if test="versionNumber != null">VERSION_NUMBER = #{versionNumber},</if>
+            <if test="isDeleted != null">IS_DELETED = #{isDeleted},</if>
+
+        </set>
+
+    </insert>
+</mapper>

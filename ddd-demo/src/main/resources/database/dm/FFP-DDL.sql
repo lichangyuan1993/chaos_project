@@ -11,7 +11,7 @@
 
 /**
   * 表字段设计规则:
-  * DELETED 字段必须出现在允许删除数据的表中，逻辑删除字段，默认为N，N为正常数据，Y为逻辑删除数据
+  * IS_DELETED 字段必须出现在允许删除数据的表中，逻辑删除字段，默认为N，N为正常数据，Y为逻辑删除数据
   * VERSION_NUMBER 必须出现在允许编辑数据的表中，版本号默认为0
   *
  */
@@ -26,7 +26,7 @@ CREATE TABLE FFP.MEMBER
     MEMBER_ID                 VARCHAR(32)                                      NOT NULL,
     MEMBERSHIP_NUMBER         VARCHAR(12)                                      NOT NULL,
     GENDER                    CHAR(1)                     DEFAULT 'U'          NOT NULL,
-    DATE_OF_BIRTH             DATE                                             NOT NULL,
+    BIRTH_DATE                DATE                                             NOT NULL,
     FAMILY_NAME_CN            NVARCHAR(32) DEFAULT '' NOT NULL,
     GIVEN_NAME_CN             NVARCHAR(32) DEFAULT '' NOT NULL,
     FAMILY_NAME_EN            VARCHAR(32)                 DEFAULT ''           NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE FFP.MEMBER
     MEMBERSHIP_STATUS         VARCHAR(12)                 DEFAULT 'ACTIVE'     NOT NULL,
     TIER_EFFECTIVE_DATE       DATE                        DEFAULT SYSDATE      NOT NULL,
     TIER_EXPIRY_DATE          DATE                        DEFAULT '9999-12-31' NOT NULL,
-    LIFETIME_ELITE_IND        CHAR(1)                     DEFAULT 'N'          NOT NULL,
+    IS_LIFETIME_ELITE         INTEGER                     DEFAULT 0            NOT NULL,
 
     -- 里程账户
     CURRENT_NAUTICAL_MILE     DECIMAL(10, 3)              DEFAULT 0.0,
@@ -57,16 +57,16 @@ CREATE TABLE FFP.MEMBER
     -- 安全审计
     PIN_CODE                  VARCHAR(12), -- BCRYPT加密存储
     LAST_ACTIVITY_DATE        DATETIME(0) DEFAULT CURRENT_TIMESTAMP,
-    CREATE_DATETIME          TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UPDATE_DATETIME          TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CREATE_USER               VARCHAR(24)                                      NOT NULL,
-    UPDATE_USER               VARCHAR(24)                                      NOT NULL,
+    CREATED_AT                TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT                TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CREATED_BY                VARCHAR(24)                                      NOT NULL,
+    UPDATED_BY                VARCHAR(24)                                      NOT NULL,
     VERSION_NUMBER            INTEGER                     DEFAULT 0            NOT NULL
 );
 
-INSERT INTO FFP.MEMBER (REC_ID, MEMBER_ID, MEMBERSHIP_NUMBER, DATE_OF_BIRTH, FAMILY_NAME_EN, GIVEN_NAME_EN,
+INSERT INTO FFP.MEMBER (REC_ID, MEMBER_ID, MEMBERSHIP_NUMBER, BIRTH_DATE, FAMILY_NAME_EN, GIVEN_NAME_EN,
                         FAMILY_NAME_CN,
-                        GIVEN_NAME_CN, ENROLLMENT_DATE, CREATE_USER, UPDATE_USER)
+                        GIVEN_NAME_CN, ENROLLMENT_DATE, CREATED_BY, UPDATED_BY)
 VALUES ('1A1234GAS126', '2A1234GAS126', '601234567890', '1997-11-28', 'Thompson', 'Emily Charlotte', '勤勉', '自由人',
         CURRENT_TIMESTAMP, 'ADMIN', 'ADMIN'),
        ('1A1234GAS127', '2A1234GAS127', '601234567891', '1997-06-01', 'Han', 'Li', '韩', '立', CURRENT_TIMESTAMP,
@@ -85,21 +85,21 @@ VALUES ('1A1234GAS126', '2A1234GAS126', '601234567890', '1997-11-28', 'Thompson'
 DROP TABLE IF EXISTS FFP.DICTIONARY_IDENTITY_DOCUMENT_TYPE;
 CREATE TABLE FFP.DICTIONARY_IDENTITY_DOCUMENT_TYPE
 (
-    REC_ID            VARCHAR(36) PRIMARY KEY,
-    TYPE_CODE         VARCHAR(36) UNIQUE,                      -- 枚举代码
-    TYPE_NAME         NVARCHAR(36) NOT NULL,                   -- 类型名称
-    EFFECTIVITY_IND   CHAR(1)                     DEFAULT 'Y', -- 是否启用
-    VERIFIED_DATETIME TIMESTAMP,
-    SEQUENCE_NUMBER   DECIMAL(10, 3)              DEFAULT 0.0, -- 排序号
-    CREATE_DATETIME   TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UPDATE_DATETIME   TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CREATE_USER       VARCHAR(24)                           NOT NULL,
-    UPDATE_USER       VARCHAR(24)                           NOT NULL,
-    VERSION_NUMBER    INTEGER                     DEFAULT 0 NOT NULL
+    REC_ID          VARCHAR(36) PRIMARY KEY,
+    TYPE_CODE       VARCHAR(36) UNIQUE,                      -- 枚举代码
+    TYPE_NAME       NVARCHAR(36) NOT NULL,                   -- 类型名称
+    IS_ACTIVE       INTEGER                     DEFAULT 0,   -- 是否启用
+    VERIFIED_AT     TIMESTAMP,
+    SEQUENCE_NUMBER DECIMAL(10, 3)              DEFAULT 0.0, -- 排序号
+    CREATED_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CREATED_BY      VARCHAR(24)                           NOT NULL,
+    UPDATED_BY      VARCHAR(24)                           NOT NULL,
+    VERSION_NUMBER  INTEGER                     DEFAULT 0 NOT NULL
 );
 
 -- 2. 插入初始枚举值
-INSERT INTO FFP.DICTIONARY_IDENTITY_DOCUMENT_TYPE (REC_ID, TYPE_CODE, TYPE_NAME, CREATE_USER, UPDATE_USER)
+INSERT INTO FFP.DICTIONARY_IDENTITY_DOCUMENT_TYPE (REC_ID, TYPE_CODE, TYPE_NAME, CREATED_BY, UPDATED_BY)
 VALUES ('1001', 'PASSPORT', '护照', 'ADMIN', 'ADMIN'),
        ('1002', 'NATIONAL_ID', '居民身份证', 'ADMIN', 'ADMIN'),
        ('1003', 'RESIDENCE_PERMIT', '外国人永久居留证', 'ADMIN', 'ADMIN'),
@@ -112,23 +112,23 @@ DROP TABLE IF EXISTS FFP.MEMBER_IDENTITY_DOCUMENT;
 -- 创建会员证件表 (兼容达梦V7/V8)
 CREATE TABLE FFP.MEMBER_IDENTITY_DOCUMENT
 (
-    REC_ID            VARCHAR(36) PRIMARY KEY                       NOT NULL,
-    MEMBER_REC_ID     VARCHAR(36)                                   NOT NULL,
-    ID_TYPE           VARCHAR(36)                                   NOT NULL,
-    ID_NUMBER         VARCHAR(24) ENCRYPT WITH AES256_ECB,                    -- 达梦加密语法修正
-    COUNTRY_OF_ISSUE  CHAR(2)                                       NOT NULL, -- 签发国(ISO)
-    ISSUE_DATE        DATE                                          ,
-    EXPIRE_DATE       DATE                                          ,
-    PRIMARY_IND       CHAR(1)                     DEFAULT 'N'       NOT NULL,
-    VERIFY_STATUS     VARCHAR(12)                 DEFAULT 'PENDING' NOT NULL,
-    VERIFIED_DATETIME TIMESTAMP,
-    SEQUENCE_NUMBER   DECIMAL(10, 3)              DEFAULT 0.0,
-    CREATE_DATETIME   TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UPDATE_DATETIME   TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CREATE_USER       VARCHAR(24)                                   NOT NULL,
-    UPDATE_USER       VARCHAR(24)                                   NOT NULL,
-    VERSION_NUMBER    INTEGER                     DEFAULT 0         NOT NULL,
-    DELETED           CHAR(1)                     DEFAULT 'N'       NOT NULL
+    REC_ID          VARCHAR(36) PRIMARY KEY                       NOT NULL,
+    MEMBER_REC_ID   VARCHAR(36)                                   NOT NULL,
+    ID_TYPE         VARCHAR(36)                                   NOT NULL,
+    ID_NUMBER       VARCHAR(24) ENCRYPT WITH AES256_ECB,                    -- 达梦加密语法修正
+    ISSUING_COUNTRY CHAR(2)                                       NOT NULL, -- 签发国(ISO)
+    ISSUE_DATE      DATE,
+    EXPIRE_DATE     DATE,
+    IS_PRIMARY      INTEGER                     DEFAULT 0         NOT NULL,
+    VERIFY_STATUS   VARCHAR(12)                 DEFAULT 'PENDING' NOT NULL,
+    VERIFIED_AT     TIMESTAMP,
+    SEQUENCE_NUMBER DECIMAL(10, 3)              DEFAULT 0.0,
+    CREATED_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CREATED_BY      VARCHAR(24)                                   NOT NULL,
+    UPDATED_BY      VARCHAR(24)                                   NOT NULL,
+    VERSION_NUMBER  INTEGER                     DEFAULT 0         NOT NULL,
+    IS_DELETED      INTEGER                     DEFAULT 0         NOT NULL
 );
 
 ALTER TABLE FFP.MEMBER_IDENTITY_DOCUMENT
@@ -136,8 +136,8 @@ ALTER TABLE FFP.MEMBER_IDENTITY_DOCUMENT
         FOREIGN KEY (ID_TYPE) REFERENCES FFP.DICTIONARY_IDENTITY_DOCUMENT_TYPE (TYPE_CODE);
 
 
-INSERT INTO FFP.MEMBER_IDENTITY_DOCUMENT(REC_ID, MEMBER_REC_ID, ID_TYPE, ID_NUMBER, COUNTRY_OF_ISSUE, EXPIRE_DATE,
-                                         CREATE_USER, UPDATE_USER)
+INSERT INTO FFP.MEMBER_IDENTITY_DOCUMENT(REC_ID, MEMBER_REC_ID, ID_TYPE, ID_NUMBER, ISSUING_COUNTRY, EXPIRE_DATE,
+                                         CREATED_BY, UPDATED_BY)
 VALUES ('2001', '1A1234GAS126', 'PASSPORT', 'E123456789', 'CN', '2026-12-31', 'ADMIN', 'ADMIN'),
        ('2002', '1A1234GAS126', 'NATIONAL_ID', '110101199001011234', 'CN', '2026-12-31', 'ADMIN', 'ADMIN'),
        ('2003', '1A1234GAS127', 'PASSPORT', 'E987654321', 'US', '2026-12-31', 'ADMIN', 'ADMIN');
@@ -147,25 +147,25 @@ VALUES ('2001', '1A1234GAS126', 'PASSPORT', 'E123456789', 'CN', '2026-12-31', 'A
 DROP TABLE IF EXISTS FFP.MEMBER_FILE;
 CREATE TABLE FFP.MEMBER_FILE
 (
-    REC_ID          VARCHAR(36) PRIMARY KEY                 NOT NULL,
-    MEMBER_REC_ID   VARCHAR(36)                             NOT NULL,
-    RELATION_TABLE  VARCHAR(64)                             NOT NULL,
-    FILE_NAME       NVARCHAR(255) DEFAULT '',
-    FILE_TYPE       VARCHAR(5)                  DEFAULT '',
-    FILE_SIZE       INTEGER                     DEFAULT 0,
-    FILE_CONTENT    BLOB                        DEFAULT 0x0000,
-    UPLOAD_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CREATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UPDATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CREATE_USER     VARCHAR(24)                             NOT NULL,
-    UPDATE_USER     VARCHAR(24)                             NOT NULL,
-    VERSION_NUMBER  INTEGER                     DEFAULT 0,
-    DELETED         CHAR(1)                     DEFAULT 'N' NOT NULL
+    REC_ID         VARCHAR(36) PRIMARY KEY               NOT NULL,
+    MEMBER_REC_ID  VARCHAR(36)                           NOT NULL,
+    RELATION_TABLE VARCHAR(64)                           NOT NULL,
+    FILE_NAME      NVARCHAR(255) DEFAULT '',
+    FILE_TYPE      VARCHAR(5)                  DEFAULT '',
+    FILE_SIZE      INTEGER                     DEFAULT 0,
+    FILE_CONTENT   BLOB                        DEFAULT 0x0000,
+    UPLOAD_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CREATED_AT     TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT     TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CREATED_BY     VARCHAR(24)                           NOT NULL,
+    UPDATED_BY     VARCHAR(24)                           NOT NULL,
+    VERSION_NUMBER INTEGER                     DEFAULT 0,
+    IS_DELETED     INTEGER                     DEFAULT 0 NOT NULL
 );
 
 
 INSERT INTO FFP.MEMBER_FILE(REC_ID, MEMBER_REC_ID, RELATION_TABLE, FILE_NAME, FILE_TYPE, FILE_SIZE, FILE_CONTENT,
-                            CREATE_USER, UPDATE_USER)
+                            CREATED_BY, UPDATED_BY)
 VALUES ('3001', '1A1234GAS126', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加抗日战争', 'pdf', 10, 0x0000, 'ADMIN', 'ADMIN'),
        ('3002', '1A1234GAS126', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加抗美援朝', 'pdf', 10, 0x0000, 'ADMIN', 'ADMIN'),
        ('3003', '1A1234GAS127', 'MEMBER_IDENTITY_DOCUMENT', '重生之参加对越反击自卫战', 'pdf', 10, 0x0000, 'ADMIN',
@@ -183,87 +183,41 @@ CREATE TABLE FFP.SYSTEM_DICTIONARY
     STATUS_NAME     NVARCHAR(12) NOT NULL,
     REMARK          NVARCHAR(128) NOT NULL,
     EXTRA_ATTRIBUTE CLOB,
-    SYSTEM_IND      CHAR(1)                     DEFAULT 'N' NOT NULL, -- Y 禁止编辑
-    EFFECTIVITY_IND CHAR(1)                     DEFAULT 'Y' NOT NULL,
+    IS_EDITED       INTEGER                     DEFAULT 0   NOT NULL, -- 0 禁止编辑
+    IS_ACTIVE       INTEGER                     DEFAULT 0   NOT NULL,
     SEQUENCE_NUMBER DECIMAL(10, 3)              DEFAULT 0.0 NOT NULL,
-    CREATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UPDATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CREATE_USER     VARCHAR(24)                             NOT NULL,
-    UPDATE_USER     VARCHAR(24)                             NOT NULL,
+    CREATED_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UPDATED_AT      TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CREATED_BY      VARCHAR(24)                             NOT NULL,
+    UPDATED_BY      VARCHAR(24)                             NOT NULL,
     VERSION_NUMBER  INTEGER                     DEFAULT 0   NOT NULL
 );
 
 -- 插入状态数据
 INSERT INTO FFP.SYSTEM_DICTIONARY
-(REC_ID, RELATION_TABLE, TABLE_FIELD, STATUS_CODE, STATUS_NAME, REMARK, SYSTEM_IND, CREATE_USER, UPDATE_USER)
+(REC_ID, RELATION_TABLE, TABLE_FIELD, STATUS_CODE, STATUS_NAME, REMARK, IS_EDITED, CREATED_BY, UPDATED_BY)
 VALUES ('4001', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'PENDING', '待核验（初始状态）',
-        '会员新上传证件后自动进入此状态', 'Y', 'ADMIN', 'ADMIN'),
+        '会员新上传证件后自动进入此状态', 0, 'ADMIN', 'ADMIN'),
        ('4002', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'IN_REVIEW', '审核中（人工介入流程）',
-        '证件模糊或信息存疑时转人工审核', 'Y', 'ADMIN', 'ADMIN'),
+        '证件模糊或信息存疑时转人工审核', 0, 'ADMIN', 'ADMIN'),
        ('4003', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'VERIFIED', '已核验通过（完整通过）', '航司地勤可信任此证件',
-        'Y', 'ADMIN', 'ADMIN'),
+        0, 'ADMIN', 'ADMIN'),
        ('4004', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'PARTIAL_VERIFY', '部分核验通过',
-        '护照核验通过但签证页未验证', 'Y', 'ADMIN', 'ADMIN'),
+        '护照核验通过但签证页未验证', 0, 'ADMIN', 'ADMIN'),
        ('4005', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'EXPIRED', '已过期（系统自动标记）',
-        '证件超过有效期自动进入此状态', 'Y', 'ADMIN', 'ADMIN'),
-       ('4006', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'REJECTED', '核验驳回', '证件照片与会员人脸不匹配', 'Y',
+        '证件超过有效期自动进入此状态', 0, 'ADMIN', 'ADMIN'),
+       ('4006', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'REJECTED', '核验驳回', '证件照片与会员人脸不匹配', 0,
         'ADMIN', 'ADMIN'),
-       ('4007', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'SUSPENDED', '已暂停使用', '证件涉嫌欺诈被临时冻结', 'Y',
+       ('4007', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'SUSPENDED', '已暂停使用', '证件涉嫌欺诈被临时冻结', 0,
         'ADMIN', 'ADMIN'),
        ('4008', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'GOV_API_FAIL', '政府系统核验失败',
-        '公安接口核验失败(例如：证件不存在)', 'Y', 'ADMIN', 'ADMIN'),
+        '公安接口核验失败(例如：证件不存在)', 0, 'ADMIN', 'ADMIN'),
        ('4009', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'THIRD_PARTY_PENDING', '第三方核验中',
-        '第三方核验中（如对接外籍证件验证服务）', 'Y', 'ADMIN', 'ADMIN'),
+        '第三方核验中（如对接外籍证件验证服务）', 0, 'ADMIN', 'ADMIN'),
        ('4010', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'RENEWAL_REQUIRED', '需更新证件',
-        '需更新证件（如护照换发后关联的居留证）', 'Y', 'ADMIN', 'ADMIN'),
+        '需更新证件（如护照换发后关联的居留证）', 0, 'ADMIN', 'ADMIN'),
        ('4011', 'MEMBER_IDENTITY_DOCUMENT', 'VERIFY_STATUS', 'ARCHIVED', '已归档（历史记录）',
-        '会员更换新证件后，旧证件的状态', 'Y', 'ADMIN', 'ADMIN');
-
-
-/**
-  1. REC_ID（技术主键）
-    定位：物理记录的唯一标识（Surrogate Key）
-    用途：
-    · 主键：作为表的物理主键，确保每条记录在数据库中的唯一性。
-    · 性能优化：通常为自增整数或UUID，索引效率高，适合作为外键引用。
-    · 稳定性：与业务无关，即使业务信息（如USER_ID）变更，REC_ID仍保持不变。
-    示例场景：
-    · 其他表通过 REC_ID 关联用户表（如订单表存储 USER_REC_ID）。
-    · 系统内部微服务调用时，通过 REC_ID 精准定位用户记录。
-  2. USER_ID（业务标识）
-    定位：业务层面的用户唯一标识（Natural Key）
-    用途：
-    · 业务识别：用户登录账号、员工工号等有业务意义的标识（如 zhangsan001）。
-    · 用户可见：暴露给用户或前端系统使用（如登录、个人资料页）。
-    · 业务约束：需唯一且不可重复，但允许按规则修改（如用户申请更换ID）。
-    示例场景：
-    · 用户使用 USER_ID 和 PASSWORD 登录系统。
-    · 业务单据中显示操作用户的 USER_ID（而非无意义的 REC_ID）。
- */
-CREATE TABLE FFP.SYSTEM_USER (
-  REC_ID VARCHAR(36) PRIMARY KEY,
-  USER_ID VARCHAR(36) NOT NULL, /* 业务层面的用户唯一标识（Natural Key）用户登录账号、员工工号等有业务意义的标识（如 zhangsan001）。 */
-  USER_NAME VARCHAR(36) NOT NULL,
-  PASSWORD VARCHAR(36) NOT NULL,
-  EMAIL VARCHAR(36) NOT NULL,
-  PHONE VARCHAR(36) NOT NULL,
-  CREATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  UPDATE_DATETIME TIMESTAMP(3) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  CREATE_USER VARCHAR(36) NOT NULL,
-  UPDATE_USER VARCHAR(36) NOT NULL
-);
+        '会员更换新证件后，旧证件的状态', 0, 'ADMIN', 'ADMIN');
 
 
 
-INSERT INTO FFP.SYSTEM_USER(REC_ID, USER_ID, USER_NAME, PASSWORD, EMAIL, PHONE, CREATE_USER, UPDATE_USER)
-VALUES ('5001', 'ADMIN','系统管理员', '123456', 'ADMIN@FFP.COM', '12345678901', 'ADMIN', 'ADMIN');
-
-
-
--- 可以看作数组或者字典，以及两者的混合体
-SELECT REC_ID,
-       JSON_VALUE(EXTRA_ATTRIBUTE, '$.gender')
-FROM FFP.SYSTEM_DICTIONARY;
-
-SELECT REC_ID, EXTRA_ATTRIBUTE
-FROM FFP.SYSTEM_DICTIONARY;

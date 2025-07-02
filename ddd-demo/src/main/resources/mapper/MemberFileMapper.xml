@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ffp.infrastructure.persistence.mybatis.mapper.MemberFileMapper">
+
+    <resultMap id="BaseResultMap" type="MemberFileEntity">
+            <id property="recId" column="REC_ID" jdbcType="VARCHAR"/>
+            <result property="memberRecId" column="MEMBER_REC_ID" jdbcType="VARCHAR"/>
+            <result property="relationTable" column="RELATION_TABLE" jdbcType="VARCHAR"/>
+            <result property="fileName" column="FILE_NAME" jdbcType="VARCHAR"/>
+            <result property="fileType" column="FILE_TYPE" jdbcType="VARCHAR"/>
+            <result property="fileSize" column="FILE_SIZE" jdbcType="INTEGER"/>
+            <result property="uploadAt" column="UPLOAD_AT" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="CREATED_AT" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="UPDATED_AT" jdbcType="TIMESTAMP"/>
+            <result property="createdBy" column="CREATED_BY" jdbcType="VARCHAR"/>
+            <result property="updatedBy" column="UPDATED_BY" jdbcType="VARCHAR"/>
+            <result property="versionNumber" column="VERSION_NUMBER" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="IS_DELETED" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        REC_ID,MEMBER_REC_ID,RELATION_TABLE,
+        FILE_NAME,FILE_TYPE,FILE_SIZE,
+        UPLOAD_AT,CREATED_AT,UPDATED_AT,
+        CREATED_BY,UPDATED_BY,VERSION_NUMBER,
+        IS_DELETED,FILE_CONTENT
+    </sql>
+    <select id="selectByMemberRecId" resultType="MemberFileEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM MEMBER_FILE
+        WHERE MEMBER_REC_ID = #{memberRecId}
+    </select>
+</mapper>

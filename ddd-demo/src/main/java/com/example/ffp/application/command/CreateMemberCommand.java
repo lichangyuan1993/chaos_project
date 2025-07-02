@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class CreateMemberCommand {
-    private MemberBasicInformationCommand memberBasicInformationCommand;
+    private MemberBasicInfoCommand memberBasicInfoCommand;
     private MemberIdentityDocumentCommand memberIdentityDocumentCommand;
     private List<MemberFileCommand> memberFileCommandList;
 }

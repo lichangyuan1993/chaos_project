@@ -3,14 +3,14 @@ package com.example.ffp.interfaces.web.controller;
 import com.example.ffp.application.command.CreateMemberCommand;
 import com.example.ffp.application.command.UpdateMemberCommand;
 import com.example.ffp.application.query.GetMemberQuery;
+import com.example.ffp.application.result.MemberBasicInfoResult;
+import com.example.ffp.application.result.PageResult;
 import com.example.ffp.application.result.MemberProfileResult;
 import com.example.ffp.interfaces.web.converter.*;
 import com.example.ffp.interfaces.web.dto.request.*;
 import com.example.ffp.interfaces.web.dto.response.*;
 import com.example.ffp.application.service.MemberApplicationService;
-import com.example.ffp.domain.repository.MemberBasicInformationRepository;
-import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
-import com.github.pagehelper.PageInfo;
+import com.example.ffp.domain.repository.MemberBasicInfoRepository;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,6 @@ import java.util.List;
 public class MemberController {
     @Resource
     private MemberApplicationService memberApplicationService;
-    @Resource
-    private MemberBasicInformationRepository memberBasicInformationRepository;
-    @Resource
-    private PageMemberRequestConverter pageMemberRequestConverter;
     @Resource
     private MemberInterfaceConverter memberInterfaceConverter;
 
@@ -64,12 +60,12 @@ public class MemberController {
     }
 
     @PostMapping(path = "/member/page")
-    public ResponseEntity<List<Object>> listMember(@Valid PageMemberRequest pageMemberRequest) {
-        PageInfo<MemberEntity> memberEntityList = PageInfo.of(memberBasicInformationRepository.listMember(pageMemberRequest));
-//        List<MemberResponse> memberResponseList = memberEntityList.getList().stream().map(MemberConverter.INSTANCE::toResponse).toList();
-        // TODO PageMemberResponse转换
-//        PageResponse<MemberResponse> pageResponseList = PageConverter.INSTANCE.toResponse(memberEntityList);
-        return ResponseEntity.ok(List.of());
+    public ResponseEntity<PageResponse<MemberBasicInfoResponse>> pageMember(@Valid PageMemberRequest pageMemberRequest) {
+        // 分页查询
+        PageResult<MemberBasicInfoResult> pageResult = memberApplicationService.pageMember(pageMemberRequest);
+        // 转换
+        PageResponse<MemberBasicInfoResponse> response = memberInterfaceConverter.toResponse(pageResult);
+        return ResponseEntity.ok(response);
     }
 
 

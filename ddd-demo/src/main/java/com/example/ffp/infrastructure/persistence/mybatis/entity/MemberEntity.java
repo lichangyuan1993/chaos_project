@@ -1,12 +1,14 @@
 package com.example.ffp.infrastructure.persistence.mybatis.entity;
 
 import lombok.Data;
+import org.apache.ibatis.type.Alias;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@Alias("MemberEntity")
 public class MemberEntity {
     private String recId;
 
@@ -16,7 +18,7 @@ public class MemberEntity {
 
     private String gender;
 
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
 
     private String familyNameCn;
 
@@ -40,7 +42,7 @@ public class MemberEntity {
 
     private LocalDate tierExpiryDate;
 
-    private String lifetimeEliteInd;
+    private Integer isLifetimeElite;
 
     private BigDecimal currentNauticalMile;
 
@@ -62,11 +64,14 @@ public class MemberEntity {
 
     private LocalDateTime lastActivityDate;
 
-    private LocalDateTime createTimestamp;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime updateTimestamp;
+    private LocalDateTime updatedAt;
 
-    private String createUser;
+    private String createdBy;
 
-    private String updateUser;
+    private String updatedBy;
+
+    private Integer versionNumber;
+
 }

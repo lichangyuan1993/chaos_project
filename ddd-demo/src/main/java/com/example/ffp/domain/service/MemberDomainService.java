@@ -1,7 +1,7 @@
 package com.example.ffp.domain.service;
 
 import com.example.ffp.domain.model.*;
-import com.example.ffp.domain.repository.MemberBasicInformationRepository;
+import com.example.ffp.domain.repository.MemberBasicInfoRepository;
 import com.example.ffp.domain.utils.MembershipNumberGenerator;
 import com.example.ffp.application.util.UniqueKey;
 import jakarta.annotation.Resource;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class MemberDomainService {
 
     @Resource
-    private MemberBasicInformationRepository memberBasicInformationRepository;
+    private MemberBasicInfoRepository memberBasicInfoRepository;
 
     /**
      * 查询会员基础信息
@@ -38,9 +38,9 @@ public class MemberDomainService {
      */
     public void updateMember(Member member) throws Throwable {
         // TODO
-        memberBasicInformationRepository.updateMemberBasicInformation(member.getMemberBasicInformation());
-        memberBasicInformationRepository.updateMemberIdentityDocumentList(member.getMemberIdentityDocumentList());
-        memberBasicInformationRepository.updateMemberFileList(member.getMemberId());
+        memberBasicInfoRepository.updateMemberBasicInformation(member.getMemberBasicInformation());
+        memberBasicInfoRepository.updateMemberIdentityDocumentList(member.getMemberIdentityDocumentList());
+        memberBasicInfoRepository.updateMemberFileList(member.getMemberId());
 //       memberRepository.updateMember(memberAggregateRoot);
     }
 
@@ -60,8 +60,8 @@ public class MemberDomainService {
         memberBasicInformation.setCreateTimestamp(now);
         memberBasicInformation.setUpdateTimestamp(now);
         // TODO
-        memberBasicInformationRepository.addMemberBasicInformation(memberBasicInformation);
-        memberBasicInformationRepository.addMemberIdentityDocumentList(member.getMemberId(), member.getMemberIdentityDocumentList());
-        memberBasicInformationRepository.addMemberFileList(member.getMemberId(), member.getMemberFileList());
+        memberBasicInfoRepository.addMemberBasicInformation(memberBasicInformation);
+        memberBasicInfoRepository.addMemberIdentityDocumentList(member.getMemberId(), member.getMemberIdentityDocumentList());
+        memberBasicInfoRepository.addMemberFileList(member.getMemberId(), member.getMemberFileList());
     }
 }

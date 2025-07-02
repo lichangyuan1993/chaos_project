@@ -1,5 +1,8 @@
 package com.example.ffp.application.converter;
 
+import com.example.ffp.application.result.MemberBasicInfoResult;
+import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
+import com.github.pagehelper.PageInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -19,4 +22,6 @@ public interface PageMemberResultConverter {
 //            @Mapping(expression = "java(source.getList().stream().map(MemberConverter.INSTANCE::toResponse).toList())", target = "list")
 //    })
 //    PageResponse<MemberResponse> toResponse(PageInfo<MemberEntity> source);
+
+    PageInfo<MemberBasicInfoResult> toResult(PageInfo<MemberEntity> source);
 }

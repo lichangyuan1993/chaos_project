@@ -7,8 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class MemberBasicInfoDTO {
-
+public class MemberBasicInfoRequest {
     private String recId;
 
     private String memberId;
@@ -17,7 +16,7 @@ public class MemberBasicInfoDTO {
 
     private String gender;
 
-    private LocalDate dateOfBirth;
+    private LocalDate birthDate;
 
     private String familyNameCn;
 
@@ -41,7 +40,7 @@ public class MemberBasicInfoDTO {
 
     private LocalDate tierExpiryDate;
 
-    private String lifetimeEliteInd;
+    private Integer isLifetimeElite;
 
     private BigDecimal currentNauticalMile;
 
@@ -63,11 +62,14 @@ public class MemberBasicInfoDTO {
 
     private LocalDateTime lastActivityDate;
 
-    private LocalDateTime createDatetime;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime updateDatetime;
+    private LocalDateTime updatedAt;
 
-    private String createUser;
+    private String createdBy;
 
-    private String updateUser;
+    private String updatedBy;
+
+    private Integer versionNumber;
+
 }

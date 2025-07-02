@@ -1,8 +1,12 @@
 package com.example.ffp.infrastructure.persistence.impl;
 
 import com.example.ffp.domain.model.*;
+import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberFileEntity;
+import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberIdentityDocumentEntity;
+import com.example.ffp.infrastructure.persistence.mybatis.mapper.MemberFileMapper;
+import com.example.ffp.infrastructure.persistence.mybatis.mapper.MemberIdentityDocumentMapper;
 import com.example.ffp.interfaces.web.dto.request.PageMemberRequest;
-import com.example.ffp.domain.repository.MemberBasicInformationRepository;
+import com.example.ffp.domain.repository.MemberBasicInfoRepository;
 import com.example.ffp.infrastructure.persistence.mybatis.converter.MemberPersistenceConverter;
 import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
 import com.example.ffp.infrastructure.persistence.mybatis.mapper.MemberMapper;
@@ -15,11 +19,15 @@ import java.util.List;
 
 @Repository
 @Transactional(rollbackFor = Exception.class)
-public class MemberBasicInformationRepositoryMybatisImpl implements MemberBasicInformationRepository {
+public class MemberBasicInfoRepositoryMybatisImpl implements MemberBasicInfoRepository {
     @Resource
     private MemberMapper memberMapper;
     @Resource
     private MemberPersistenceConverter memberPersistenceConverter;
+    @Resource
+    private MemberIdentityDocumentMapper memberIdentityDocumentMapper;
+    @Resource
+    private MemberFileMapper memberFileMapper;
 
     @Override
     public Member getMemberBasicInformation(MemberId memberId) {
@@ -33,14 +41,23 @@ public class MemberBasicInformationRepositoryMybatisImpl implements MemberBasicI
 
     @Override
     public Member getMemberProfile(MemberId memberId) {
+        // 查询基础信息
         MemberEntity  memberEntity = memberMapper.getOneByMemberId(memberId.getValue());
-        List<MemberIdentityDocumentEntity> memberIdentityDocumentEntityList = memberIdentityDocumentMapper.query(memberEntity.getMemberId());
-        List<MemberFileEntity> memberFileEntityList =  memberFileEntity = memberFileMapper.query(memberEntity.getMemberId());
+
         MemberBasicInformation memberBasicInformation = memberPersistenceConverter.toDomain(memberEntity);
-        return Member.fromMemberBasicInformation(
+        // 查询证件信息
+        List<MemberIdentityDocumentEntity> memberIdentityDocumentEntityList = memberIdentityDocumentMapper.selectByMemberRecId(memberEntity.getMemberId());
+        // 查询附件信息
+        List<MemberFileEntity> memberFileEntityList = memberFileMapper.selectByMemberRecId(memberEntity.getMemberId());
+        List<MemberIdentityDocument> memberIdentityDocumentList = memberIdentityDocumentEntityList.stream().map(memberPersistenceConverter::toDomain).toList();
+
+        List<MemberFile> memberFileList = memberFileEntityList.stream().map(memberPersistenceConverter::toDomain).toList();
+        return Member.fromMemberProfile(
                 memberEntity.getMemberId(),
                 memberEntity.getMembershipNumber(),
-                memberBasicInformation);
+                memberBasicInformation,
+                memberIdentityDocumentList,
+                memberFileList);
     }
 
 
@@ -62,12 +79,9 @@ public class MemberBasicInformationRepositoryMybatisImpl implements MemberBasicI
 //    }
 
     @Override
-    public List<MemberEntity> listMember(PageMemberRequest pageMemberRequest) {
-        PageHelper.clearPage();
-        PageHelper.startPage(pageMemberRequest.getPageNum(), pageMemberRequest.getPageSize(),true);
-        PageHelper.orderBy(pageMemberRequest.getSort());
+    public List<MemberEntity> queryMember(PageMemberRequest pageMemberRequest) {
 
-        List<MemberEntity> pageInfo = memberMapper.query(memberPersistenceConverter.toEntity(pageMemberRequest));
+        List<MemberEntity> pageInfo = memberMapper.select(memberPersistenceConverter.toEntity(pageMemberRequest));
         PageHelper.clearPage();
         return pageInfo;
     }

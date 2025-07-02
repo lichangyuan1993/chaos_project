@@ -1,4 +1,4 @@
 package com.example.ffp.application.result;
 
-public class MemberBasicInformationResult {
+public class MemberBasicInfoResult {
 }

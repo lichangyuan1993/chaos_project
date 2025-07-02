@@ -372,7 +372,7 @@
             </if>
         </where>
     </select>
-    <select id="query" resultMap="BaseResultMap">
+    <select id="select" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM FFP.MEMBER

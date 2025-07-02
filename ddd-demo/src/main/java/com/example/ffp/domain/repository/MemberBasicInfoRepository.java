@@ -7,7 +7,7 @@ import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
 import java.util.List;
 
 
-public interface MemberBasicInformationRepository {
+public interface MemberBasicInfoRepository {
 
     Member getMemberBasicInformation(MemberId memberId);
 
@@ -17,7 +17,7 @@ public interface MemberBasicInformationRepository {
 
 //    void updateMember(Member member) throws Throwable;
 
-    List<MemberEntity> listMember(PageMemberRequest pageMemberRequest);
+    List<MemberEntity> queryMember(PageMemberRequest pageMemberRequest);
 
 //    void createMember(Member domain) throws Exception, Throwable;
 

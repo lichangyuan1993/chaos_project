@@ -4,10 +4,16 @@ import com.example.ffp.application.command.CreateMemberCommand;
 import com.example.ffp.application.command.UpdateMemberCommand;
 import com.example.ffp.application.converter.MemberApplicationConverter;
 import com.example.ffp.application.query.GetMemberQuery;
+import com.example.ffp.application.result.PageResult;
+import com.example.ffp.application.result.MemberBasicInfoResult;
 import com.example.ffp.application.result.MemberProfileResult;
 import com.example.ffp.domain.model.*;
-import com.example.ffp.domain.repository.MemberBasicInformationRepository;
+import com.example.ffp.domain.repository.MemberBasicInfoRepository;
 import com.example.ffp.domain.service.MemberDomainService;
+import com.example.ffp.infrastructure.persistence.mybatis.entity.MemberEntity;
+import com.example.ffp.interfaces.web.dto.request.PageMemberRequest;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +22,7 @@ import java.util.List;
 @Service
 public class MemberApplicationService {
     @Resource
-    private MemberBasicInformationRepository memberBasicInformationRepository;
+    private MemberBasicInfoRepository memberBasicInfoRepository;
     @Resource
     private MemberDomainService memberDomainService;
     @Resource
@@ -28,7 +34,7 @@ public class MemberApplicationService {
     public MemberProfileResult getMemberBasicInformation(GetMemberQuery getMemberQuery) {
         // memberId和membershipNumber，全部转换成memberId
         MemberId memberId = getMemberId(getMemberQuery.getMemberId(), getMemberQuery.getMembershipNumber());
-        Member member = memberBasicInformationRepository.getMemberBasicInformation(memberId);
+        Member member = memberBasicInfoRepository.getMemberBasicInformation(memberId);
         return memberApplicationConverter.toResult(member);
     }
 
@@ -37,7 +43,7 @@ public class MemberApplicationService {
      */
     public MemberProfileResult getMemberProfile(GetMemberQuery getMemberQuery) {
         MemberId memberId = getMemberId(getMemberQuery.getMemberId(), getMemberQuery.getMembershipNumber());
-        Member member = memberBasicInformationRepository.getMemberProfile(memberId);
+        Member member = memberBasicInfoRepository.getMemberProfile(memberId);
         return memberApplicationConverter.toResult(member);
     }
 
@@ -47,7 +53,7 @@ public class MemberApplicationService {
             return MemberId.from(memberId);
         }
         if(membershipNumber != null) {
-            return memberBasicInformationRepository.getMemberId(MembershipNumber.from(membershipNumber));
+            return memberBasicInfoRepository.getMemberId(MembershipNumber.from(membershipNumber));
         }
         throw new RuntimeException("会员ID或会员号不能同时为空");
     }
@@ -68,7 +74,7 @@ public class MemberApplicationService {
     public MemberProfileResult updateMember(UpdateMemberCommand updateMemberCommand) throws Throwable {
         Member aggregateRoot = memberApplicationConverter.toAggregateRoot(updateMemberCommand);
         memberDomainService.updateMember(aggregateRoot);
-        Member member = memberBasicInformationRepository.getMemberProfile(aggregateRoot.getMemberId());
+        Member member = memberBasicInfoRepository.getMemberProfile(aggregateRoot.getMemberId());
         return memberApplicationConverter.toResult(member);
     }
 
@@ -76,7 +82,22 @@ public class MemberApplicationService {
         Member member = memberApplicationConverter.toAggregateRoot(creatememberCommand);
         memberDomainService.enrollMember(member);
         // 确保MemberId不为空
-        Member memberBasicInformation = memberBasicInformationRepository.getMemberBasicInformation(member.getMemberId());
+        Member memberBasicInformation = memberBasicInfoRepository.getMemberBasicInformation(member.getMemberId());
         return memberApplicationConverter.toResult(memberBasicInformation);
+    }
+
+    public PageResult<MemberBasicInfoResult> pageMember(PageMemberRequest pageMemberRequest) {
+
+        // 构建分页参数
+
+        PageHelper.startPage(pageMemberRequest.getPageNum(), pageMemberRequest.getPageSize(),true);
+        PageHelper.orderBy(pageMemberRequest.getSort());
+        // 分页查询
+        Page<MemberEntity> entityPage = (Page<MemberEntity>) memberBasicInfoRepository.queryMember(pageMemberRequest);
+        PageResult<MemberBasicInfoResult> pageResult = memberApplicationConverter.toResult( entityPage);
+        // 分装成PageInfo
+//        PageInfo<MemberEntity> pageInfo = PageInfo.of(memberEntityList);
+//        // 转换VO
+        return pageResult;
     }
 }

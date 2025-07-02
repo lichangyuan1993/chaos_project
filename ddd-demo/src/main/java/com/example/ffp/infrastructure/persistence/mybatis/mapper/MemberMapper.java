@@ -22,7 +22,7 @@ public interface MemberMapper {
 
     MemberEntity getOneByMembershipNumber(String membershipNumber);
 
-    List<MemberEntity> query(MemberEntity entity);
+    List<MemberEntity> select(MemberEntity entity);
 
     int update(MemberEntity entity);
 
